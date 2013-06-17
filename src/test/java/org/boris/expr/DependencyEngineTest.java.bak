@@ -34,7 +34,6 @@ public class DependencyEngineTest extends TestCase
         e.set("B1", "2");
         e.set("A2", "3");
         e.set("B2", "4");
-        e.set("D4", "=sum(A1:A2)");
         e.set("D4", "=sum(A1:B2)");
         assertResult(e, "D4", 10);
         e.set("A1", "10");
