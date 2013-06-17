@@ -56,8 +56,11 @@ public class Graph implements Iterable
         Set s = (Set) inbounds.get(node);
         if (s != null) {
             Iterator i = s.iterator();
+            Set<Edge> remove = new HashSet<Edge>();
             while (i.hasNext())
-                remove((Edge) i.next());
+                remove.add((Edge) i.next());
+            for (Edge edge : remove)
+                remove(edge);
         }
     }
 
