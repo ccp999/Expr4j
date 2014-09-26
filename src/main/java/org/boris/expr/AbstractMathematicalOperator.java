@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public abstract class AbstractMathematicalOperator extends
         AbstractBinaryOperator
 {
@@ -23,7 +24,7 @@ public abstract class AbstractMathematicalOperator extends
             return 0;
         if (e instanceof ExprMissing)
             return 0;
-        ExprTypes.assertType(e, ExprType.Integer, ExprType.Double);
+        
         return ((ExprNumber) e).doubleValue();
     }
 
@@ -36,9 +37,21 @@ public abstract class AbstractMathematicalOperator extends
         if (r instanceof ExprError) {
             return r;
         }
-        return evaluate(evaluateExpr(l, context), evaluateExpr(r, context));
+        
+        assertType(l, r);        
+        Operands operands = new Operands(l, r);
+        
+        if (context.getOperandConversionVisitor() != null) {            
+            context.getOperandConversionVisitor().convertOperands(operands);
+        }
+        
+        return evaluate(evaluateExpr(operands.getLeftOperand(), context),
+                evaluateExpr(operands.getRightOperand(), context));
     }
 
     protected abstract Expr evaluate(double lhs, double rhs)
+            throws ExprException;
+
+    protected abstract void assertType(Expr le, Expr re)
             throws ExprException;
 }

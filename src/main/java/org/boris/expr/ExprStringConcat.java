@@ -26,10 +26,16 @@ public class ExprStringConcat extends AbstractBinaryOperator
             r = ((ExprEvaluatable) rhs).evaluate(context);
         if (r instanceof ExprNumber)
             r = new ExprString(r.toString());
-        if (l.type.equals(ExprType.String) && r.type.equals(ExprType.String)) {
-            return new ExprString(((ExprString) l).str + ((ExprString) r).str);
-        }
 
+        if (l != null && r != null && l.type.equals(ExprType.String) && r.type.equals(ExprType.String)) {
+            return new ExprString(((ExprString) l).str + ((ExprString) r).str);
+        }        
+        else if (l == null && r != null && r.type.equals(ExprType.String)) {
+            return new ExprString(((ExprString) r).str);
+        }
+        else if (r == null && l != null && l.type.equals(ExprType.String)) {
+            return new ExprString(((ExprString) l).str);
+        }
         throw new ExprException("Unexpected arguments for string concatenation");
     }
 

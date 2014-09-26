@@ -12,3 +12,4 @@
 *.prefs
 
 target/
+/bin/

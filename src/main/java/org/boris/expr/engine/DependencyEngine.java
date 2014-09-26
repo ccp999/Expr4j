@@ -16,6 +16,7 @@ import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprVariable;
 import org.boris.expr.IEvaluationContext;
+import org.boris.expr.IOperandConversionVisitor;
 import org.boris.expr.parser.IParserVisitor;
 import org.boris.expr.util.Edge;
 import org.boris.expr.util.Graph;
@@ -143,5 +144,10 @@ public class DependencyEngine extends AbstractCalculationEngine implements
                 // TODO: handle
             }
         }
+    }
+
+    @Override
+    public IOperandConversionVisitor getOperandConversionVisitor() {
+        return null;
     }
 }

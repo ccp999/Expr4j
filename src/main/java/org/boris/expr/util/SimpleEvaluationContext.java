@@ -17,6 +17,7 @@ import org.boris.expr.ExprException;
 import org.boris.expr.ExprFunction;
 import org.boris.expr.ExprVariable;
 import org.boris.expr.IEvaluationContext;
+import org.boris.expr.IOperandConversionVisitor;
 import org.boris.expr.function.AbstractFunction;
 import org.boris.expr.function.ExcelFunctionProvider;
 import org.boris.expr.function.FunctionManager;
@@ -54,5 +55,9 @@ public class SimpleEvaluationContext implements IEvaluationContext
 
             return e;
         }
+    }
+
+    public IOperandConversionVisitor getOperandConversionVisitor() {
+        return null;
     }
 }

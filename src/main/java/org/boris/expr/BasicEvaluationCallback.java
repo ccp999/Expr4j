@@ -17,6 +17,7 @@ import org.boris.expr.engine.GridMap;
 import org.boris.expr.engine.Range;
 import org.boris.expr.function.ExcelFunctionProvider;
 import org.boris.expr.function.FunctionManager;
+import org.boris.expr.function.IFunctionProvider;
 import org.boris.expr.parser.ExprLexer;
 import org.boris.expr.parser.ExprParser;
 import org.boris.expr.parser.IParserVisitor;
@@ -28,6 +29,7 @@ public class BasicEvaluationCallback implements IEvaluationContext,
     private Map<String, Expr> variables = new HashMap<String, Expr>();
     private FunctionManager functions = new FunctionManager();
     private GridMap grid = new GridMap();
+    private IOperandConversionVisitor operandConversionVisitor;
 
     public BasicEvaluationCallback() {
         functions.add(new ExcelFunctionProvider());
@@ -35,6 +37,12 @@ public class BasicEvaluationCallback implements IEvaluationContext,
         variables.put("FALSE", ExprBoolean.FALSE);
     }
 
+    public BasicEvaluationCallback(IFunctionProvider baseSupportedFunctions) {
+        functions.add(baseSupportedFunctions);
+        variables.put("TRUE", ExprBoolean.TRUE);
+        variables.put("FALSE", ExprBoolean.FALSE);
+    }
+    
     public void addVariable(String name, Expr value) {
         variables.put(name, value);
     }
@@ -86,5 +94,13 @@ public class BasicEvaluationCallback implements IEvaluationContext,
 
     public void annotateVariable(ExprVariable variable) throws ExprException {
         variable.setAnnotation(Range.valueOf(variable.getName()));
+    }
+
+    public IOperandConversionVisitor getOperandConversionVisitor() {
+        return this.operandConversionVisitor;
+    }
+
+    public void setOperandConversionVisitor(IOperandConversionVisitor operandConversionVisitor) {
+        this.operandConversionVisitor = operandConversionVisitor;
     }
 }

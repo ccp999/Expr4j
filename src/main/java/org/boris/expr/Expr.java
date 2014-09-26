@@ -37,4 +37,8 @@ public abstract class Expr
     protected ExprBoolean bool(boolean bool) {
         return bool ? ExprBoolean.TRUE : ExprBoolean.FALSE;
     }
+    
+    public ExprType getType() {
+        return this.type;
+    }
 }

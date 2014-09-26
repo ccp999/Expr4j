@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public class ExprSubtraction extends AbstractMathematicalOperator
 {
     public ExprSubtraction(Expr lhs, Expr rhs) {
@@ -29,5 +30,11 @@ public class ExprSubtraction extends AbstractMathematicalOperator
             return "-" + rhs;
         else
             return lhs + "-" + rhs;
+    }
+    
+    @Override
+    protected void assertType(Expr le, Expr re) throws ExprException {
+        ExprTypes.assertType(le, ExprType.Integer, ExprType.Double, ExprType.Date);
+        ExprTypes.assertType(re, ExprType.Integer, ExprType.Double, ExprType.Date);
     }
 }

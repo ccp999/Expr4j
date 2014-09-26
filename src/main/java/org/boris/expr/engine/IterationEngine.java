@@ -18,6 +18,7 @@ import org.boris.expr.ExprArray;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
+import org.boris.expr.IOperandConversionVisitor;
 
 public class IterationEngine extends AbstractCalculationEngine
 {
@@ -134,5 +135,9 @@ public class IterationEngine extends AbstractCalculationEngine
         if (autoCalculate) {
             calc();
         }
+    }
+
+    public IOperandConversionVisitor getOperandConversionVisitor() {
+        return null;
     }
 }

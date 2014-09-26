@@ -24,4 +24,10 @@ public class ExprDivision extends AbstractMathematicalOperator
     public String toString() {
         return lhs + "/" + rhs;
     }
+    
+    @Override
+    protected void assertType(Expr le, Expr re) throws ExprException {
+        ExprTypes.assertType(le, ExprType.Integer, ExprType.Double);
+        ExprTypes.assertType(re, ExprType.Integer, ExprType.Double);
+    }
 }
