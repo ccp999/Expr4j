@@ -60,4 +60,8 @@ public class SimpleEvaluationContext implements IEvaluationContext
     public IOperandConversionVisitor getOperandConversionVisitor() {
         return null;
     }
+
+    public boolean throwEvalErrors() {
+        return false;
+    }
 }

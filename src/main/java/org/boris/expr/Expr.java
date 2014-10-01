@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public abstract class Expr
 {
     public final ExprType type;
@@ -29,11 +30,17 @@ public abstract class Expr
     protected Expr eval(Expr expr, IEvaluationContext context)
             throws ExprException {
         if (expr instanceof ExprEvaluatable) {
-            return ((ExprEvaluatable) expr).evaluate(context);
+            Expr resultExpr = ((ExprEvaluatable) expr).evaluate(context);
+            if (resultExpr != null && resultExpr.type == ExprType.Error && context.throwEvalErrors()) {
+                throw new ExprEvaluationException((ExprError) resultExpr);
+            }
+            
+            else return resultExpr;                
         }
+        
         return expr;
     }
-
+    
     protected ExprBoolean bool(boolean bool) {
         return bool ? ExprBoolean.TRUE : ExprBoolean.FALSE;
     }

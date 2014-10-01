@@ -33,14 +33,14 @@ public class ExprAddition extends AbstractMathematicalOperator
         else
             return lhs + "+" + rhs;
     }
-    
+
     @Override
-    protected void assertType(Expr le, Expr re) throws ExprException {
-        if (!le.evaluatable) {
-            ExprTypes.assertType(le, ExprType.Integer, ExprType.Double, ExprType.Date);
-        }
-        if (!re.evaluatable) {
-            ExprTypes.assertType(re, ExprType.Integer, ExprType.Double);
-        }
+    protected ExprError assertTypeLeft(Expr le) throws ExprException {
+        return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date);
+    }
+
+    @Override
+    protected ExprError assertTypeRight(Expr re) throws ExprException {
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double);
     }
 }

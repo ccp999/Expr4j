@@ -22,10 +22,14 @@ public class ExprPower extends AbstractMathematicalOperator
     public String toString() {
         return lhs + "^" + rhs;
     }
-    
+
     @Override
-    protected void assertType(Expr le, Expr re) throws ExprException {
-        ExprTypes.assertType(le, ExprType.Integer, ExprType.Double);
-        ExprTypes.assertType(re, ExprType.Integer, ExprType.Double);
+    protected ExprError assertTypeLeft(Expr le) throws ExprException {
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double);
     }
+
+    @Override
+    protected ExprError assertTypeRight(Expr re) throws ExprException {
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double);
+    }    
 }

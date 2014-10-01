@@ -17,6 +17,7 @@ public class ExprTypes
             if (t.equals(value.type))
                 return;
         }
+
         throw new ExprException("Unexpected type: " + value.type);
-    }
+    } 
 }

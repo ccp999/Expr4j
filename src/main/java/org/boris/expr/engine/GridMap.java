@@ -65,7 +65,7 @@ public class GridMap
         } else {
             GridReference gr = range.getDimension1();
             if (gr == null)
-                return ExprError.NAME;
+                return ExprError.generateError(ExprError.NAME, range.toString());
             return get(gr.getColumn(), gr.getRow());
         }
     }

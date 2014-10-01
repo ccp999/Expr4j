@@ -38,7 +38,12 @@ public abstract class AbstractMathematicalOperator extends
             return r;
         }
         
-        assertType(l, r);        
+        ExprError leftAssertError = assertTypeLeft(l);
+        ExprError rightAssertError= assertTypeLeft(r);
+        
+        inspectAssertError(leftAssertError, l, this.lhs);
+        inspectAssertError(rightAssertError, r, this.rhs);
+        
         Operands operands = new Operands(l, r);
         
         if (context.getOperandConversionVisitor() != null) {            
@@ -49,9 +54,40 @@ public abstract class AbstractMathematicalOperator extends
                 evaluateExpr(operands.getRightOperand(), context));
     }
 
+    private void inspectAssertError(ExprError error, Expr valueExpr, Expr variableExpr) throws ExprEvaluationException {
+        if (error != null) {
+            if (variableExpr != null && variableExpr.type == ExprType.Variable) {
+                error.setVariableName(variableExpr.toString());
+            }
+            
+            if (valueExpr != null) {
+                error.setValue(valueExpr.toString());
+            }            
+
+            throw new ExprEvaluationException(error);
+        }
+    }
+    
     protected abstract Expr evaluate(double lhs, double rhs)
             throws ExprException;
 
-    protected abstract void assertType(Expr le, Expr re)
+    protected abstract ExprError assertTypeLeft(Expr le)
             throws ExprException;
+    
+    protected abstract ExprError assertTypeRight(Expr re)
+            throws ExprException;
+    
+    protected ExprError assertType(Expr expr, Expr generatedErrorType, ExprType... types) throws ExprException {
+        if (expr != null && !expr.evaluatable) {
+            try {
+                ExprTypes.assertType(expr, types);
+            }
+            catch (ExprException e) {
+                return ExprError.generateError(generatedErrorType);
+            }                        
+        }
+        
+        return null;
+    }
+    
 }

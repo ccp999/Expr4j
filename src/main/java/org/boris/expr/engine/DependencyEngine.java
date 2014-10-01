@@ -150,4 +150,9 @@ public class DependencyEngine extends AbstractCalculationEngine implements
     public IOperandConversionVisitor getOperandConversionVisitor() {
         return null;
     }
+
+    @Override
+    public boolean throwEvalErrors() {
+        return false;
+    }
 }

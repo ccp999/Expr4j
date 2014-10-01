@@ -31,12 +31,12 @@ public abstract class AbstractFunction implements IExprFunction
 
     protected void assertArgCount(Expr[] args, int count) throws ExprException {
         if (args == null && count != 0) {
-            throw new ExprException(getClass().getSimpleName() +
+            throw new FunctionValidationException(getClass().getSimpleName() +
                     " function takes no arguments");
         }
 
         if (args.length != count)
-            throw new ExprException(getClass().getSimpleName() +
+            throw new FunctionValidationException(getClass().getSimpleName() +
                     " function takes " + count + " arguments");
     }
 
@@ -45,7 +45,7 @@ public abstract class AbstractFunction implements IExprFunction
         assertArgCount(args, types.length);
         for (int i = 0; i < args.length; i++) {
             if (!args[i].type.equals(types[i])) {
-                throw new ExprException("Invalid argument (" + i + 1 +
+                throw new FunctionValidationException("Invalid argument (" + i + 1 +
                         ") to function: " + getClass().getSimpleName());
             }
         }
@@ -61,7 +61,7 @@ public abstract class AbstractFunction implements IExprFunction
         }
         if (!strict)
             return 0;
-        throw new ExprException("Invalid argument type for function " +
+        throw new FunctionValidationException("Invalid argument type for function " +
                 getClass().getSimpleName());
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractFunction implements IExprFunction
         }
         if (!strict)
             return 0;
-        throw new ExprException("Invalid argument type for function " +
+        throw new FunctionValidationException("Invalid argument type for function " +
                 getClass().getSimpleName());
     }
 
@@ -89,7 +89,7 @@ public abstract class AbstractFunction implements IExprFunction
         }
         if (!strict)
             return false;
-        throw new ExprException("Invalid argument type for function " +
+        throw new FunctionValidationException("Invalid argument type for function " +
                 getClass().getSimpleName());
     }
 
@@ -107,19 +107,19 @@ public abstract class AbstractFunction implements IExprFunction
             }
             return "";
         }
-        throw new ExprException("Invalid argument type for function " +
+        throw new FunctionValidationException("Invalid argument type for function " +
                 getClass().getSimpleName());
     }
 
     protected void assertArgType(Expr expr, ExprType type) throws ExprException {
         if (expr == null) {
             if (type != null)
-                throw new ExprException("Invalid empty argument for function " +
+                throw new FunctionValidationException("Invalid empty argument for function " +
                         getClass().getSimpleName());
 
         } else {
             if (!expr.type.equals(type)) {
-                throw new ExprException("Invalid argument type for function " +
+                throw new FunctionValidationException("Invalid argument type for function " +
                         getClass().getSimpleName());
             }
         }
@@ -134,14 +134,14 @@ public abstract class AbstractFunction implements IExprFunction
     protected void assertMinArgCount(Expr[] args, int count)
             throws ExprException {
         if (args.length < count)
-            throw new ExprException("Too few arguments to function " +
+            throw new FunctionValidationException("Too few arguments to function " +
                     getClass().getSimpleName());
     }
 
     protected void assertMaxArgCount(Expr[] args, int count)
             throws ExprException {
         if (args.length > count)
-            throw new ExprException("Too many arguments to function " +
+            throw new FunctionValidationException("Too many arguments to function " +
                     getClass().getSimpleName());
     }
 
@@ -206,7 +206,7 @@ public abstract class AbstractFunction implements IExprFunction
         }
 
         if (strict)
-            throw new ExprException("Argument not an array for function: " +
+            throw new FunctionValidationException("Argument not an array for function: " +
                     getClass().getSimpleName());
 
         ExprArray ea = new ExprArray(1, 1);

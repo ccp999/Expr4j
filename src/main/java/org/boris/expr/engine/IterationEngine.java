@@ -140,4 +140,9 @@ public class IterationEngine extends AbstractCalculationEngine
     public IOperandConversionVisitor getOperandConversionVisitor() {
         return null;
     }
+
+    @Override
+    public boolean throwEvalErrors() {
+        return false;
+    }
 }

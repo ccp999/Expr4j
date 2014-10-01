@@ -16,4 +16,6 @@ public interface IEvaluationContext
     public Expr evaluateVariable(ExprVariable variable) throws ExprException;
 
     public IOperandConversionVisitor getOperandConversionVisitor();
+    
+    public boolean throwEvalErrors();
 }

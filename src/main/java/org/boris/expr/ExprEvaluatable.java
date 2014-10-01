@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public abstract class ExprEvaluatable extends Expr
 {
     ExprEvaluatable(ExprType type) {
@@ -20,5 +21,5 @@ public abstract class ExprEvaluatable extends Expr
     }
 
     public abstract Expr evaluate(IEvaluationContext context)
-            throws ExprException;
+            throws ExprException; 
 }

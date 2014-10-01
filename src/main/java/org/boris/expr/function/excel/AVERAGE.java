@@ -10,8 +10,10 @@ import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprMissing;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprString;
+import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
+import org.boris.expr.function.FunctionValidationException;
 
 public class AVERAGE extends AbstractFunction
 {
@@ -28,7 +30,11 @@ public class AVERAGE extends AbstractFunction
         for (Expr a : args)
             eval(context, a, values, true);
 
-        if (values[1] == 0) {
+        if (values[1] == 0) {            
+            if (args != null && args.length > 1 && args[1].type == ExprType.Variable) {
+                return ExprError.generateError(ExprError.DIV0, args[1].toString());
+            }
+            
             return ExprError.DIV0;
         }
 
@@ -48,7 +54,7 @@ public class AVERAGE extends AbstractFunction
 
         if (a instanceof ExprString) {
             if (strict)
-                throw new ExprException("Unexpected argument for AVERAGE: " + a);
+                throw new FunctionValidationException("Unexpected argument for AVERAGE: " + a);
             else
                 return;
         }
@@ -73,6 +79,6 @@ public class AVERAGE extends AbstractFunction
             return;
         }
 
-        throw new ExprException("Unexpected argument for AVERAGE: " + a);
+        throw new FunctionValidationException("Unexpected argument for AVERAGE: " + a);
     }
 }

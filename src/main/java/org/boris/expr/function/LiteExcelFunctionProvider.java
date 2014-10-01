@@ -19,6 +19,7 @@ import org.boris.expr.IEvaluationContext;
 import org.boris.expr.IExprFunction;
 import org.boris.expr.function.excel.AVERAGE;
 import org.boris.expr.function.excel.CONCATENATE;
+import org.boris.expr.function.excel.FORMAT;
 import org.boris.expr.function.excel.IF;
 import org.boris.expr.function.excel.SUM;
 
@@ -31,6 +32,7 @@ public class LiteExcelFunctionProvider implements IFunctionProvider
         functions.put("CONCATENATE", new CONCATENATE());
         functions.put("IF", new IF());
         functions.put("SUM", new SUM());
+        functions.put("FORMAT", new FORMAT());
     }
 
     public boolean hasFunction(ExprFunction function) {

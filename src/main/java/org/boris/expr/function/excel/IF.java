@@ -14,11 +14,8 @@ public class IF extends AbstractFunction
 {
     public Expr evaluate(IEvaluationContext context, Expr[] args)
             throws ExprException {
-        if (args.length < 2)
-            throw new ExprException("Too few arguments entered for function IF");
-        if (args.length > 3)
-            throw new ExprException(
-                    "Too many arguments entered for function IF");
+        assertMinArgCount(args, 2);
+        assertMaxArgCount(args, 3);
 
         Expr cond = evalArg(context, args[0]);
         Expr yRes = args[1];

@@ -10,6 +10,7 @@
 package org.boris.expr;
 
 import org.boris.expr.parser.ExprParser;
+import org.boris.expr.util.GraphCycleException;
 
 public class ExprTest extends TH
 {
@@ -68,7 +69,7 @@ public class ExprTest extends TH
         System.out.println(e);
     }
 
-    private BasicEvaluationCallback c() {
+    private BasicEvaluationCallback c() throws GraphCycleException {
         BasicEvaluationCallback c = new BasicEvaluationCallback();
         c.addVariable("X", new ExprDouble(5.3));
         return c;
