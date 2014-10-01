@@ -50,8 +50,13 @@ public abstract class AbstractMathematicalOperator extends
             context.getOperandConversionVisitor().convertOperands(operands);
         }
         
-        return evaluate(evaluateExpr(operands.getLeftOperand(), context),
-                evaluateExpr(operands.getRightOperand(), context));
+        if (l == null && r == null) {
+            return new ExprMissing();
+        }
+        else {
+            return evaluate(evaluateExpr(operands.getLeftOperand(), context),
+                    evaluateExpr(operands.getRightOperand(), context));
+        }
     }
 
     private void inspectAssertError(ExprError error, Expr valueExpr, Expr variableExpr) throws ExprEvaluationException {

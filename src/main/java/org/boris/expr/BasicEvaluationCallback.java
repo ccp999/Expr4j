@@ -57,15 +57,16 @@ public class BasicEvaluationCallback implements IEvaluationContext,
     }
     
     public ExprVariable[] addVariable(String name, Expr value) throws GraphCycleException {
-        variables.put(name, value);
+        String nameUpperCase = name.toUpperCase();
+        variables.put(nameUpperCase, value);
         ExprVariable[] vars = ExprVariable.findVariables(value);
         
         if (vars != null && vars.length > 0) {
             List<ExprVariable> dependencies = new ArrayList<>(Arrays.asList(vars));
-            dependencyMap.put(name, dependencies);
+            dependencyMap.put(nameUpperCase, dependencies);
         }
         
-        checkCycle(name, new TreeSet<String>());
+        checkCycle(nameUpperCase, new TreeSet<String>());
         
         return vars;
     }
@@ -83,7 +84,7 @@ public class BasicEvaluationCallback implements IEvaluationContext,
         List<ExprVariable> dependencies = this.dependencyMap.get(name);
         if (dependencies != null) {
             for (ExprVariable dependencyName : dependencies) {
-                checkCycle(dependencyName.getName(), visitedNames);
+                checkCycle(dependencyName.getName().toUpperCase(), visitedNames);
             }
         }
     }

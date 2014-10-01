@@ -21,6 +21,8 @@ import org.boris.expr.function.excel.AVERAGE;
 import org.boris.expr.function.excel.CONCATENATE;
 import org.boris.expr.function.excel.FORMAT;
 import org.boris.expr.function.excel.IF;
+import org.boris.expr.function.excel.MAX;
+import org.boris.expr.function.excel.MIN;
 import org.boris.expr.function.excel.SUM;
 
 public class LiteExcelFunctionProvider implements IFunctionProvider
@@ -32,6 +34,8 @@ public class LiteExcelFunctionProvider implements IFunctionProvider
         functions.put("CONCATENATE", new CONCATENATE());
         functions.put("IF", new IF());
         functions.put("SUM", new SUM());
+        functions.put("MIN", new MIN());
+        functions.put("MAX", new MAX());
         functions.put("FORMAT", new FORMAT());
     }
 
