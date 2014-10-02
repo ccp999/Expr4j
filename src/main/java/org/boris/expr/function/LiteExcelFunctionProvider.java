@@ -6,6 +6,7 @@
  * 
  * Contributors:
  *     Peter Smith
+ *     Jason Steinbrunner
  *******************************************************************************/
 package org.boris.expr.function;
 
