@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public class ExprStringConcat extends AbstractBinaryOperator
 {
     public ExprStringConcat(Expr lhs, Expr rhs) {
@@ -19,8 +20,17 @@ public class ExprStringConcat extends AbstractBinaryOperator
         Expr l = lhs;
         if (l instanceof ExprEvaluatable)
             l = ((ExprEvaluatable) lhs).evaluate(context);
-        if (l instanceof ExprNumber)
-            l = new ExprString(l.toString());
+        if (l instanceof ExprNumber) {
+            // This will allow for any precision on the double, but not add ".0" to a whole number
+            long longValue = (long) ((ExprNumber) l).doubleValue();
+            double doubleValue = ((ExprNumber) l).doubleValue();
+            if (longValue == doubleValue) {
+                l = new ExprString(new Long(longValue).toString());
+            }
+            else {
+                l = new ExprString(new Double(doubleValue).toString());
+            }
+        }
         Expr r = rhs;
         if (r instanceof ExprEvaluatable)
             r = ((ExprEvaluatable) rhs).evaluate(context);

@@ -33,12 +33,12 @@ public class ExprSubtraction extends AbstractMathematicalOperator
     }
     
     @Override
-    protected ExprError assertTypeLeft(Expr le) throws ExprException {
-        return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date);
+    protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
+        return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
     }
 
     @Override
-    protected ExprError assertTypeRight(Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date);
+    protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
+        return assertType(re, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
     }    
 }

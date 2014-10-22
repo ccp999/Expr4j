@@ -38,8 +38,21 @@ public abstract class AbstractMathematicalOperator extends
             return r;
         }
         
-        ExprError leftAssertError = assertTypeLeft(l);
-        ExprError rightAssertError= assertTypeLeft(r);
+        if (l != null && l.getType() == ExprType.Missing) {
+            return new ExprMissing();
+        }
+        else if (r != null && r.getType() == ExprType.Missing) {
+            return new ExprMissing();
+        }
+        else if (l != null && l.getType() == ExprType.Error) {
+            throw new ExprEvaluationException((ExprError) l);
+        }
+        else if (r != null && r.getType() == ExprType.Error) {
+            throw new ExprEvaluationException((ExprError) r);
+        }
+        
+        ExprError leftAssertError = assertTypeLeft(l, r);
+        ExprError rightAssertError= assertTypeRight(l, r);
         
         inspectAssertError(leftAssertError, l, this.lhs);
         inspectAssertError(rightAssertError, r, this.rhs);
@@ -76,10 +89,10 @@ public abstract class AbstractMathematicalOperator extends
     protected abstract Expr evaluate(double lhs, double rhs)
             throws ExprException;
 
-    protected abstract ExprError assertTypeLeft(Expr le)
+    protected abstract ExprError assertTypeLeft(Expr le, Expr re)
             throws ExprException;
     
-    protected abstract ExprError assertTypeRight(Expr re)
+    protected abstract ExprError assertTypeRight(Expr le, Expr re)
             throws ExprException;
     
     protected ExprError assertType(Expr expr, Expr generatedErrorType, ExprType... types) throws ExprException {

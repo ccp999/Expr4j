@@ -35,12 +35,20 @@ public class ExprAddition extends AbstractMathematicalOperator
     }
 
     @Override
-    protected ExprError assertTypeLeft(Expr le) throws ExprException {
-        return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date);
+    protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
+        if (re != null && re.type == ExprType.Date) {    
+            return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+        } else {
+            return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
+        }        
     }
 
     @Override
-    protected ExprError assertTypeRight(Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double);
+    protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
+        if (le != null && le.type == ExprType.Date) {    
+            return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+        } else {
+            return assertType(re, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
+        }        
     }
 }

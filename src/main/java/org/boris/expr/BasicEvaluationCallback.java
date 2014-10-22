@@ -79,13 +79,14 @@ public class BasicEvaluationCallback implements IEvaluationContext,
         if (visitedNames.contains(name)) {
             throw new GraphCycleException("Circular reference found.");    
         }
-        
-        visitedNames.add(name);
+                
         List<ExprVariable> dependencies = this.dependencyMap.get(name);
         if (dependencies != null) {
+            visitedNames.add(name);
             for (ExprVariable dependencyName : dependencies) {
                 checkCycle(dependencyName.getName().toUpperCase(), visitedNames);
             }
+            visitedNames.remove(name);
         }
     }
     

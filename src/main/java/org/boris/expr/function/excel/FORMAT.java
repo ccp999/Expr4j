@@ -6,8 +6,8 @@ import org.boris.expr.Expr;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprFormatted;
 import org.boris.expr.ExprNumber;
-import org.boris.expr.ExprString;
 import org.boris.expr.ExprType;
 import org.boris.expr.ExprTypes;
 import org.boris.expr.IEvaluationContext;
@@ -37,6 +37,7 @@ public class FORMAT extends AbstractFunction
         }                                
 
         DecimalFormat decimalFormat = new DecimalFormat(format);
-        return new ExprString(decimalFormat.format( ((ExprNumber) expression).doubleValue()));
+        decimalFormat.setRoundingMode(java.math.RoundingMode.UP);
+        return new ExprFormatted(decimalFormat.format( ((ExprNumber) expression).doubleValue()));
     }
 }

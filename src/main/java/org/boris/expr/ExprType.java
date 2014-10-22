@@ -33,5 +33,6 @@ public enum ExprType
     NotEqual,
     Equal,
     Power,
-    Date
+    Date,
+    Formatted
 }

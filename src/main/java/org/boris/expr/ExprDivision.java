@@ -31,12 +31,12 @@ public class ExprDivision extends AbstractMathematicalOperator
     }
 
     @Override
-    protected ExprError assertTypeLeft(Expr le) throws ExprException {
-        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double);
+    protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
     }
 
     @Override
-    protected ExprError assertTypeRight(Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double);
-    }
+    protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+    }   
 }
