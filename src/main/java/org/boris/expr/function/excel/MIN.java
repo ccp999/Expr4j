@@ -7,6 +7,7 @@ import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
+import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
 
@@ -36,10 +37,13 @@ public class MIN extends AbstractFunction
 
     public static Expr min(IEvaluationContext context, Expr arg)
             throws ExprException {
+        String variableName = getVariableName(arg);
         if (arg instanceof ExprEvaluatable) {
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
 
+        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Double, ExprType.Integer, ExprType.Array);
+        
         if (arg instanceof ExprNumber) {
             return new ExprDouble(((ExprNumber) arg).doubleValue());
         }

@@ -13,7 +13,9 @@ import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
 import org.boris.expr.ExprBoolean;
 import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
+import org.boris.expr.ExprEvaluationException;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprMissing;
@@ -214,6 +216,37 @@ public abstract class AbstractFunction implements IExprFunction
         return ea;
     }
 
+    protected static void validateEvalType(Expr arg, ExprError validationError, String variableName, ExprType... validTypes)
+            throws ExprEvaluationException {
+        
+        if (arg == null) {
+            return;
+        }
+        else if (arg.type == ExprType.Error) {
+            throw new ExprEvaluationException((ExprError) arg);
+        }
+        else {
+            for (ExprType validType : validTypes) {
+                if (arg.getType() == validType) {
+                    return;
+                }
+            }
+        }
+        
+        validationError.setValue(arg.toString());
+        validationError.setVariableName(variableName);
+
+        throw new ExprEvaluationException(validationError);        
+    }
+    
+    public static String getVariableName(Expr arg) {
+        if (arg != null && arg.type == ExprType.Variable) {
+            return arg.toString();
+        }
+        
+        return null;
+    }
+    
     protected boolean isNumber(Expr x) {
         return x instanceof ExprDouble || x instanceof ExprInteger;
     }

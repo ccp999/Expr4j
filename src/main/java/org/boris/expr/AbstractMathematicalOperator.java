@@ -37,11 +37,8 @@ public abstract class AbstractMathematicalOperator extends
         if (r instanceof ExprError) {
             return r;
         }
-        
-        if (l != null && l.getType() == ExprType.Missing) {
-            return new ExprMissing();
-        }
-        else if (r != null && r.getType() == ExprType.Missing) {
+
+        if ((l == null || l.getType() == ExprType.Missing) && (r == null || r.getType() == ExprType.Missing)) {
             return new ExprMissing();
         }
         else if (l != null && l.getType() == ExprType.Error) {

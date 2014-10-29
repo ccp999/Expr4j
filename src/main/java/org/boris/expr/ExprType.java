@@ -34,5 +34,6 @@ public enum ExprType
     Equal,
     Power,
     Date,
-    Formatted
+    Formatted,
+    NumberText
 }

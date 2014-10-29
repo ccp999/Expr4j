@@ -9,7 +9,6 @@ import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprMissing;
 import org.boris.expr.ExprNumber;
-import org.boris.expr.ExprString;
 import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
@@ -43,21 +42,18 @@ public class AVERAGE extends AbstractFunction
 
     public static void eval(IEvaluationContext context, Expr a,
             double[] values, boolean strict) throws ExprException {
-        if (a instanceof ExprEvaluatable)
+        String variableName = getVariableName(a);
+        
+        if (a instanceof ExprEvaluatable) {
             a = ((ExprEvaluatable) a).evaluate(context);
-
+        }
         if (a == null)
             return;
 
         if (a instanceof ExprMissing)
             return;
 
-        if (a instanceof ExprString) {
-            if (strict)
-                throw new FunctionValidationException("Unexpected argument for AVERAGE: " + a);
-            else
-                return;
-        }
+        validateEvalType(a, ExprError.generateError(ExprError.NUM), variableName, ExprType.Double, ExprType.Integer, ExprType.Array);
 
         if (a instanceof ExprDouble || a instanceof ExprInteger) {
             double d = ((ExprNumber) a).doubleValue();

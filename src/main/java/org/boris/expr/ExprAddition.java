@@ -37,18 +37,18 @@ public class ExprAddition extends AbstractMathematicalOperator
     @Override
     protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
         if (re != null && re.type == ExprType.Date) {    
-            return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+            return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
         } else {
-            return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
+            return assertType(le, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Date, ExprType.Formatted, ExprType.NumberText);
         }        
     }
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
         if (le != null && le.type == ExprType.Date) {    
-            return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+            return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
         } else {
-            return assertType(re, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Date, ExprType.Formatted);
+            return assertType(re, ExprError.NUM_OR_DATE, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Date, ExprType.Formatted, ExprType.NumberText);
         }        
     }
 }

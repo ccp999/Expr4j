@@ -259,6 +259,10 @@ public class ExprLexer
                 return ExprToken.GREATER_THAN;
             }
         } else if (current == '=') {
+            if (peek == '=') {
+                reader.read();
+            } 
+            
             return ExprToken.EQUAL;
         }
         return null;

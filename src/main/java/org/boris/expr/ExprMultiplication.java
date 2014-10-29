@@ -25,11 +25,11 @@ public class ExprMultiplication extends AbstractMathematicalOperator
     
     @Override
     protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
-        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Formatted);
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }    
 }
