@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -32,7 +34,7 @@ public class MOD extends AbstractFunction
             return ExprError.VALUE;
         }
 
-        double num = ((ExprNumber) n).doubleValue();
+        BigDecimal num = ((ExprNumber) n).decimalValue();
 
         Expr d = args[1];
         if (d instanceof ExprEvaluatable) {
@@ -42,13 +44,14 @@ public class MOD extends AbstractFunction
             return ExprError.VALUE;
         }
 
-        double div = ((ExprNumber) d).doubleValue();
+        BigDecimal div = ((ExprNumber) d).decimalValue();
 
         // Need to match sign with implementation
-        double mod = num % div;
-        if ((mod > 0 && div < 0) || (mod < 0 && div > 0))
-            mod *= -1;
+        BigDecimal mod = num.remainder(div);
+        if ((mod.compareTo(BigDecimal.ZERO) > 0 && div.compareTo(BigDecimal.ZERO) < 0)
+                || (mod.compareTo(BigDecimal.ZERO) < 0 && div.compareTo(BigDecimal.ZERO) > 0))
+            mod.negate();
 
-        return new ExprDouble(mod);
+        return new ExprDecimal(mod);
     }
 }

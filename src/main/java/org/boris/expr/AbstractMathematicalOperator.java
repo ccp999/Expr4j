@@ -17,15 +17,15 @@ public abstract class AbstractMathematicalOperator extends
         super(type, lhs, rhs);
     }
 
-    protected double evaluateExpr(Expr e, IEvaluationContext context)
+    protected ExprNumber evaluateExpr(Expr e, IEvaluationContext context)
             throws ExprException {
         e = eval(e, context);
         if (e == null)
-            return 0;
-        if (e instanceof ExprMissing)
-            return 0;
+            return new ExprInteger(0);
+        if (e.type == ExprType.Missing)
+            return getDefaultValueForMissing();
         
-        return ((ExprNumber) e).doubleValue();
+        return ((ExprNumber) e);
     }
 
     public Expr evaluate(IEvaluationContext context) throws ExprException {
@@ -38,10 +38,19 @@ public abstract class AbstractMathematicalOperator extends
             return r;
         }
 
-        if ((l == null || l.getType() == ExprType.Missing) && (r == null || r.getType() == ExprType.Missing)) {
+        boolean lMissing = isMissing(l);
+        boolean rMissing = isMissing(r);
+        
+        // If both inputs are missing, evaluate to missing.
+        // If either input specifies to cancel evaluation when it is missing, evaluate to missing
+        if (lMissing & rMissing) {
             return new ExprMissing();
         }
-        else if (l != null && l.getType() == ExprType.Error) {
+        else if ((l != null && lMissing && l.isCancelEvalOnMissing()) || (r != null && rMissing && r.isCancelEvalOnMissing())) {
+            return new ExprMissing();
+        }
+        
+        if (l != null && l.getType() == ExprType.Error) {
             throw new ExprEvaluationException((ExprError) l);
         }
         else if (r != null && r.getType() == ExprType.Error) {
@@ -69,6 +78,17 @@ public abstract class AbstractMathematicalOperator extends
         }
     }
 
+    private boolean isMissing(Expr expr) {
+        if (expr == null) {
+            return true;
+        }
+        else if (expr.getType() == ExprType.Missing) {
+            return true;
+        }
+        
+        return false;
+    }
+    
     private void inspectAssertError(ExprError error, Expr valueExpr, Expr variableExpr) throws ExprEvaluationException {
         if (error != null) {
             if (variableExpr != null && variableExpr.type == ExprType.Variable) {
@@ -83,7 +103,9 @@ public abstract class AbstractMathematicalOperator extends
         }
     }
     
-    protected abstract Expr evaluate(double lhs, double rhs)
+    protected abstract ExprNumber getDefaultValueForMissing();
+    
+    protected abstract Expr evaluate(ExprNumber lhs, ExprNumber rhs)
             throws ExprException;
 
     protected abstract ExprError assertTypeLeft(Expr le, Expr re)

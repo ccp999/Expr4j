@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr.engine;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ import org.boris.expr.IOperandConversionVisitor;
 public class IterationEngine extends AbstractCalculationEngine
 {
     private int maxIterations = 100;
-    private double maxChange = 0.0001;
+    private BigDecimal maxChange = new BigDecimal("0.0001");
     private Map<Range, Expr> inputExprs = new HashMap();
 
     public IterationEngine(EngineProvider provider) {
@@ -34,8 +35,8 @@ public class IterationEngine extends AbstractCalculationEngine
         this.maxIterations = iterations;
     }
 
-    public void setMaxChange(double change) {
-        this.maxChange = Math.abs(change);
+    public void setMaxChange(BigDecimal change) {
+        this.maxChange = change.abs();
     }
 
     public void calculate(boolean force) throws ExprException {
@@ -49,20 +50,20 @@ public class IterationEngine extends AbstractCalculationEngine
         Set<Range> inputs = getInputRanges();
         Map<Range, Expr> valueChanges = new HashMap();
         for (int i = 0; i < maxIterations; i++) {
-            double change = 0;
+            BigDecimal change = BigDecimal.ZERO;
             for (Range r : inputs) {
                 Expr e = inputExprs.get(r);
                 if (e instanceof ExprEvaluatable) {
                     e = ((ExprEvaluatable) e).evaluate(this);
                     values.put(r, e);
                     valueChanges.put(r, e);
-                    double c = findChange(values.get(r), e);
-                    if (c > change)
+                    BigDecimal c = findChange(values.get(r), e);
+                    if (c.compareTo(change) > 0)
                         change = c;
                 }
             }
 
-            if (change < maxChange)
+            if (change.compareTo(maxChange) < 0)
                 break;
         }
 
@@ -71,33 +72,32 @@ public class IterationEngine extends AbstractCalculationEngine
         }
     }
 
-    private double findChange(Expr old, Expr nu) {
+    private BigDecimal findChange(Expr old, Expr nu) {
         if (old == null || nu == null)
-            return 0;
+            return BigDecimal.ZERO;
 
         if (old.type != nu.type)
-            return 0;
+            return BigDecimal.ZERO;
 
         if (nu instanceof ExprNumber) {
-            return Math.abs(((ExprNumber) old).doubleValue() -
-                    ((ExprNumber) nu).doubleValue());
+            return ((ExprNumber) old).decimalValue().subtract(((ExprNumber) nu).decimalValue()).abs();
         }
 
         if (nu instanceof ExprArray) {
             Expr[] oldA = ((ExprArray) old).getInternalArray();
             Expr[] nuA = ((ExprArray) nu).getInternalArray();
 
-            double change = 0;
+            BigDecimal change = BigDecimal.ZERO;
             for (int i = 0; i < oldA.length && i < nuA.length; i++) {
-                double c = findChange(oldA[i], nuA[i]);
-                if (c > change)
+                BigDecimal c = findChange(oldA[i], nuA[i]);
+                if (c.compareTo(change) > 0)
                     change = c;
             }
 
             return change;
         }
 
-        return 0;
+        return BigDecimal.ZERO;
     }
 
     public void set(Range range, String expression) throws ExprException {

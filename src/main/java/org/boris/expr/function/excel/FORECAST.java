@@ -2,7 +2,7 @@ package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -25,7 +25,7 @@ public class FORECAST extends AbstractFunction
         if (!(eX instanceof ExprArray))
             return ExprError.VALUE;
 
-        double forecastX = ((ExprNumber) eF).doubleValue();
+        double forecastX = ((ExprNumber) eF).decimalValue().doubleValue();
         ExprArray knownY = (ExprArray) eY;
         ExprArray knownX = (ExprArray) eX;
         if (knownY.length() != knownX.length())
@@ -38,8 +38,8 @@ public class FORECAST extends AbstractFunction
         if (aeX instanceof ExprError)
             return aeX;
 
-        double averageY = ((ExprNumber) aeY).doubleValue();
-        double averageX = ((ExprNumber) aeX).doubleValue();
+        double averageY = ((ExprNumber) aeY).decimalValue().doubleValue();
+        double averageX = ((ExprNumber) aeX).decimalValue().doubleValue();
 
         double bnum = 0;
         double bdem = 0;
@@ -57,6 +57,6 @@ public class FORECAST extends AbstractFunction
         double a = averageY - b * averageX;
         double res = a + b * forecastX;
 
-        return new ExprDouble(res);
+        return new ExprDecimal(Double.toString(res));
     }
 }

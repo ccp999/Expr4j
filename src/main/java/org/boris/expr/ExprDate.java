@@ -10,28 +10,31 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ExprDate extends ExprNumber
+public class ExprDate extends ExprDecimal
 {
-    public final Date value;
-
     public ExprDate(Date value) {
-        super(ExprType.Date);
-        this.value = value;
-    }
-
-    @Override
-    public int intValue() {
-        return (int) value.getTime();
-    }
-
-    @Override
-    public double doubleValue() {
-        return value.getTime();
+        super(ExprType.Date, Double.toString(value.getTime()));
+        this.cancelEvalOnMissing = true;
     }
     
     public int hashCode() {
         return value.hashCode();
+    }
+    
+    public String toString() {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        if (this.value == null) {
+            return "";
+        }
+        
+        try {
+            return format.format(this.value);
+        }
+        catch (Exception e) {
+            return this.value.toString();
+        }
     }
 }

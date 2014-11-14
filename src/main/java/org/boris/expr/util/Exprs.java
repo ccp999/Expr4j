@@ -9,10 +9,12 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprFunction;
@@ -37,7 +39,7 @@ public class Exprs
             result = new ExprInteger(Integer.parseInt(expression));
         } catch (Exception e) {
             try {
-                result = new ExprDouble(Double.parseDouble(expression));
+                result = new ExprDecimal(expression);
             } catch (Exception ex) {
                 result = new ExprString(expression);
             }
@@ -45,6 +47,21 @@ public class Exprs
         return result;
     }
 
+    /**
+     * This will allow for any precision on the double, but not add ".0" to a whole number
+     * @param doubleValue
+     * @return
+     */
+    public static ExprString doubleToString(double doubleValue) {
+        long longValue = (long) doubleValue;
+        if (longValue == doubleValue) {
+            return new ExprString(new Long(longValue).toString());
+        }
+        else {
+            return new ExprString(new Double(doubleValue).toString());
+        }
+    }
+    
     public static String getString(IEvaluationContext context, Expr expr)
             throws ExprException {
         if (expr instanceof ExprEvaluatable) {
@@ -69,8 +86,8 @@ public class Exprs
         if (e instanceof ExprString)
             return ((ExprString) e).str;
 
-        if (e instanceof ExprDouble)
-            return ((ExprDouble) e).doubleValue();
+        if (e instanceof ExprDecimal)
+            return e;
 
         if (e instanceof ExprInteger)
             return ((ExprInteger) e).intValue();
@@ -85,8 +102,8 @@ public class Exprs
         if (o == null)
             return null;
 
-        if (o instanceof Double)
-            return new ExprDouble(((Double) o).doubleValue());
+        if (o instanceof BigDecimal)
+            return new ExprDecimal(o.toString());
 
         if (o instanceof Integer)
             return new ExprInteger(((Integer) o).intValue());

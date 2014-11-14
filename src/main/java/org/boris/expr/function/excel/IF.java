@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprMissing;
@@ -29,7 +31,7 @@ public class IF extends AbstractFunction
             Expr res = evalArg(context,
                     ((ExprNumber) cond).booleanValue() ? yRes : nRes);
             if (res instanceof ExprMissing) {
-                res = ExprDouble.ZERO;
+                res = new ExprDecimal(BigDecimal.ZERO);
             }
             return res;
         }

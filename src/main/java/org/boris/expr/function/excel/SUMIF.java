@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprNumber;
@@ -33,21 +35,21 @@ public class SUMIF extends AbstractFunction
         Condition cond = Condition.valueOf(evalArg(context, args[1]));
         Expr sumrange = args.length == 3 ? evalArg(context, args[2]) : range;
 
-        double sum = 0;
+        BigDecimal sum = BigDecimal.ZERO;
         for (int i = 0; i < len; i++) {
-            sum += eval(get(range, i), cond, get(sumrange, i));
+            sum = sum.add(eval(get(range, i), cond, get(sumrange, i)));
         }
 
-        return new ExprDouble(sum);
+        return new ExprDecimal(sum);
     }
 
-    protected double eval(Expr item, Condition c, Expr value)
+    protected BigDecimal eval(Expr item, Condition c, Expr value)
             throws ExprException {
         if (c.eval(item)) {
-            if (value instanceof ExprDouble || value instanceof ExprInteger) {
-                return ((ExprNumber) value).doubleValue();
+            if (value instanceof ExprDecimal || value instanceof ExprInteger) {
+                return ((ExprNumber) value).decimalValue();
             }
         }
-        return 0.;
+        return BigDecimal.ZERO;
     }
 }

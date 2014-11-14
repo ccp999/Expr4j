@@ -14,6 +14,7 @@ public abstract class Expr
 {
     public final ExprType type;
     public final boolean evaluatable;
+    protected boolean cancelEvalOnMissing = false;
 
     Expr(ExprType type, boolean evaluatable) {
         this.type = type;
@@ -47,5 +48,9 @@ public abstract class Expr
     
     public ExprType getType() {
         return this.type;
+    }
+
+    public boolean isCancelEvalOnMissing() {
+        return cancelEvalOnMissing;
     }
 }

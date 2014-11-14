@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -17,6 +19,6 @@ public class FACT extends AbstractFunction
         if (value < 0)
             return ExprError.NUM;
 
-        return new ExprDouble(Statistics.factorial((int) value).doubleValue());
+        return new ExprDecimal(new BigDecimal(Double.toString(Statistics.factorial((int) value).doubleValue())));
     }
 }

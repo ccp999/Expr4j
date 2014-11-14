@@ -1,10 +1,11 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
-import org.boris.expr.ExprNumber;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
 import org.boris.expr.util.Statistics;
@@ -18,34 +19,35 @@ public class BETADIST extends AbstractFunction
         Expr eX = evalArg(context, args[0]);
         if (!isNumber(eX))
             return ExprError.VALUE;
-        double x = ((ExprNumber) eX).doubleValue();
+        BigDecimal x = ((ExprDecimal) eX).decimalValue();
         Expr eAlpha = evalArg(context, args[1]);
         if (!isNumber(eAlpha))
             return ExprError.VALUE;
-        double alpha = ((ExprNumber) eAlpha).doubleValue();
-        if (alpha <= 0)
+        BigDecimal alpha = ((ExprDecimal) eAlpha).decimalValue();
+        if (alpha.compareTo(BigDecimal.ZERO) <= 0)
             return ExprError.NUM;
         Expr eBeta = evalArg(context, args[2]);
         if (!isNumber(eBeta))
             return ExprError.VALUE;
-        double beta = ((ExprNumber) eBeta).doubleValue();
-        if (beta <= 0)
+        BigDecimal beta = ((ExprDecimal) eBeta).decimalValue();
+        if (beta.compareTo(BigDecimal.ZERO) <= 0)
             return ExprError.NUM;
-        double a = 0, b = 1;
+        BigDecimal a = BigDecimal.ZERO;
+        BigDecimal b = BigDecimal.ONE;
         if (args.length > 3) {
             Expr eA = evalArg(context, args[3]);
             if (!isNumber(eA))
                 return ExprError.VALUE;
-            a = ((ExprNumber) eA).doubleValue();
+            a = ((ExprDecimal) eA).decimalValue();
         }
         if (args.length > 4) {
             Expr eB = evalArg(context, args[4]);
             if (!isNumber(eB))
                 return ExprError.VALUE;
-            b = ((ExprNumber) eB).doubleValue();
+            b = ((ExprDecimal) eB).decimalValue();
         }
-        if (x < a || x > b || a == b)
+        if (x.compareTo(a) < 0 || x.compareTo(b) > 0  || a.compareTo(b) == 0)
             return ExprError.NUM;
-        return new ExprDouble(Statistics.betaDist(x, alpha, beta, a, b));
+        return new ExprDecimal(Statistics.betaDist(x, alpha, beta, a, b));
     }
 }

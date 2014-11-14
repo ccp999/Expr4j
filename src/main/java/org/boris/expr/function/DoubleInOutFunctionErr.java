@@ -10,7 +10,7 @@
 package org.boris.expr.function;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -26,7 +26,7 @@ public abstract class DoubleInOutFunctionErr extends AbstractFunction
             return a;
         if (!isNumber(a))
             return ExprError.VALUE;
-        return new ExprDouble(evaluate(((ExprNumber) a).doubleValue()));
+        return new ExprDecimal(Double.toString(evaluate(((ExprNumber) a).decimalValue().doubleValue())));
     }
 
     protected abstract double evaluate(double value) throws ExprException;

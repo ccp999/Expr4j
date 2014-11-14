@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -17,13 +19,13 @@ public class CHIDIST extends AbstractFunction
         Expr eX = evalArg(context, args[0]);
         if (!isNumber(eX))
             return ExprError.VALUE;
-        double x = ((ExprNumber) eX).doubleValue();
+        BigDecimal x = ((ExprNumber) eX).decimalValue();
         Expr eDF = evalArg(context, args[1]);
         if (!isNumber(eDF))
             return ExprError.VALUE;
         int df = ((ExprNumber) eDF).intValue();
         if (df < 0 || df > 10e10)
             return ExprError.NUM;
-        return new ExprDouble(Statistics.chiDist(x, df));
+        return new ExprDecimal(Statistics.chiDist(x, df));
     }
 }

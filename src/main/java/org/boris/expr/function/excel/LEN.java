@@ -2,9 +2,9 @@ package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprString;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
@@ -22,6 +22,6 @@ public class LEN extends AbstractFunction
             str = ((ExprString) a).str;
         else
             str = a.toString();
-        return new ExprDouble(str.length());
+        return new ExprInteger(str.length());
     }
 }

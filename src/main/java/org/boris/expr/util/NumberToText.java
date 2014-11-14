@@ -1,5 +1,8 @@
 package org.boris.expr.util;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +11,11 @@ import java.util.TreeSet;
 
 public class NumberToText {
 
+    private static BigDecimal MAX_VALUE = new BigDecimal("999999999999999.99");
+    private static BigDecimal ONE_THOUSAND = new BigDecimal("1000");
+    private static BigDecimal ONE_HUNDRED = new BigDecimal("100");
+    private static BigDecimal TWENTY = new BigDecimal("20");
+    
     private static final String[] specialNames = { "", " thousand", " million", " billion", " trillion" };
 
     private static final String[] tensNames = { "", " ten", " twenty", " thirty", " fourty", " fifty", " sixty",
@@ -41,26 +49,26 @@ public class NumberToText {
         validWords.add("point");
     }
 
-    private static String convertLessThanOneThousand(int number) {
+    private static String convertLessThanOneThousand(BigDecimal number) {
         String current;
 
         // Handles numbers between 1 and 19
-        if (number % 100 < 20) {
-            current = numNames[(int) number % 100];
-            number /= 100;
+        if (number.remainder(ONE_HUNDRED).compareTo(TWENTY) < 0) {
+            current = numNames[number.remainder(ONE_HUNDRED).intValue()];
+            number = number.divide(ONE_HUNDRED, new MathContext(50)).setScale(0, RoundingMode.DOWN);
         //Handles numbers between 20 through 99 by concatenating tw parts together
         //i.e. 95 = "ninety" + "five"
         } else {            
-            current = numNames[(int) number % 10];
-            number /= 10;
+            current = numNames[number.remainder(BigDecimal.TEN).intValue()];
+            number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
 
-            current = tensNames[(int) number % 10] + current;
-            number /= 10;
+            current = tensNames[number.remainder(BigDecimal.TEN).intValue()] + current;
+            number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
         }
-        if (number == 0) return current;
+        if (number.compareTo(BigDecimal.ZERO) == 0) return current;
         
         // Handles numbers > 99
-        return numNames[(int) number] + " hundred" + current;
+        return numNames[number.intValue()] + " hundred" + current;
     }
 
     /**
@@ -68,7 +76,7 @@ public class NumberToText {
      * @param words
      * @return
      */
-    public static double convert(String words) throws UnparsableNumberTextException {
+    public static double convert(String words) {
         List<String> wordList = Arrays.asList(words.split(" "));
         double convertedValue = 0;
         double multiplierValue = 0;
@@ -125,7 +133,7 @@ public class NumberToText {
         }
     }
 
-    private static double convertSpecialName(String specialName) throws UnparsableNumberTextException {        
+    private static double convertSpecialName(String specialName) {        
         int index = specialNamesList.indexOf(" " + specialName);
         double value = 1;
         if (index >= 0) {
@@ -143,24 +151,26 @@ public class NumberToText {
      * @param number
      * @return
      */
-    public static String convert(double number) {
+    public static String convert(BigDecimal number) {
         // Let's stop at 999 trillion
-        if (number > 999999999999999d) {
-            return Double.toString(number);
+        if (number.compareTo(MAX_VALUE) >= 0) {
+            return number.toString();
         }
        
         // Parse decimal portion off as an integer so we can convert
         // it the same way
-        int decimalAsInt = (int) Math.round((number % 1) * 100);
-        if (decimalAsInt < 0) {
-            decimalAsInt = -decimalAsInt;
+        //int decimalAsInt = (int) Math.round((number % 1) * 100);
+        BigDecimal scaleValue = number.remainder(BigDecimal.ONE).multiply(ONE_HUNDRED);
+        if (scaleValue.compareTo(BigDecimal.ZERO) < 0) {
+            scaleValue = scaleValue.negate();
         }
 
+        number = number.setScale(0, RoundingMode.DOWN);
         String convertedNumber = convertNumber(number);
         
         // If there is a decimal, convert that too
-        if (decimalAsInt > 0) {
-            String convertedDecimal = convertNumber(decimalAsInt);
+        if (scaleValue.compareTo(BigDecimal.ZERO) > 0) {
+            String convertedDecimal = convertNumber(scaleValue);
             return convertedNumber + " point " + convertedDecimal;
         } else {
             return convertedNumber;
@@ -174,12 +184,13 @@ public class NumberToText {
      * @param text
      * @return
      */
-    public static String convertToCurrency(String text) {
+    public static String convertToCurrency(String text, boolean singleDollar, boolean singleCent) {
         if (text.indexOf("point") > 0) {
-            return text.replace("point", "dollars and") + " cents";
+            return text.replace("point", "dollar" + (singleDollar == false ? "s" : "") + " and") + " cent"
+                    + (singleCent == false ? "s" : "");
         }
         else {
-            return text + " dollars";
+            return text + " dollar" + (singleDollar == false ? "s" : "");
         }
     }
     
@@ -209,15 +220,15 @@ public class NumberToText {
      * @param number
      * @return
      */
-    private static String convertNumber(double number) {
-        if (number == 0) {
+    private static String convertNumber(BigDecimal number) {
+        if (number.compareTo(BigDecimal.ZERO) == 0) {
             return "zero";
         }
 
         String prefix = "";
 
-        if (number < 0) {
-            number = -number;
+        if (number.compareTo(BigDecimal.ZERO) < 0) {
+            number = number.negate();
             prefix = "negative";
         }
 
@@ -225,14 +236,15 @@ public class NumberToText {
         int place = 0;
 
         do {
-            int n = (int) (number % 1000);
-            if (n != 0) {
-                String s = convertLessThanOneThousand(n);
+            //int n = (int) (number % 1000);
+            BigDecimal remainder = number.remainder(ONE_THOUSAND);
+            if (remainder.compareTo(BigDecimal.ZERO)  != 0) {
+                String s = convertLessThanOneThousand(remainder);
                 current = s + specialNames[place] + current;
             }
             place++;
-            number /= 1000;
-        } while (number >= 1);
+            number = number.divide(ONE_THOUSAND, new MathContext(50)).setScale(0, RoundingMode.DOWN) ;
+        } while (number.compareTo(BigDecimal.ZERO) >= 1);
 
         return (prefix + current).trim();
     }

@@ -9,48 +9,31 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.util.NumberToText;
 
 
-public class ExprNumberText extends ExprNumber
+public class ExprNumberText extends ExprDecimal
 {
-    public double value;
     public final String text;
 
     public ExprNumberText(String text) {               
         super(ExprType.NumberText);
         this.text = text;
         try {
-            this.value = NumberToText.convert(text);
+            setValue(Double.toString(NumberToText.convert(text)));
         } catch (Exception e) {
-           this.value = 0;
+           setValue("0");
         }
     }
 
-    public ExprNumberText(String text, double number) {               
-        super(ExprType.NumberText);
+    public ExprNumberText(String text, BigDecimal number) {               
+        super(ExprType.NumberText, number);
         this.text = text;
-        this.value = number;
-    }
-
-    public int intValue() {
-        return (int) value;
-    }
-
-    public double doubleValue() {
-        return value;
     }
 
     public String toString() {
         return this.text;
-    }
-
-    public int hashCode() {
-        return (int) value * 100;
-    }
-
-    public boolean equals(Object obj) {
-        return obj instanceof ExprNumberText &&
-                Math.abs(value - ((ExprNumberText) obj).value) < 1.0e-10;
     }
 }

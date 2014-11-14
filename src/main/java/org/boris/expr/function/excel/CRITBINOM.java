@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -23,16 +25,16 @@ public class CRITBINOM extends AbstractFunction
         Expr ep = evalArg(context, args[1]);
         if (!isNumber(ep))
             return ExprError.VALUE;
-        double p = ((ExprNumber) ep).doubleValue();
-        if (p < 0 || p > 1)
+        BigDecimal p = ((ExprNumber) ep).decimalValue();
+        if (p.compareTo(BigDecimal.ZERO) < 0 || p.compareTo(BigDecimal.ONE) > 0)
             return ExprError.NUM;
         Expr ea = evalArg(context, args[2]);
         if (!isNumber(ea))
             return ExprError.VALUE;
-        double alpha = ((ExprNumber) ea).doubleValue();
-        if (alpha < 0 || alpha > 1)
+        BigDecimal alpha = ((ExprNumber) ea).decimalValue();
+        if (alpha.compareTo(BigDecimal.ZERO) < 0 || alpha.compareTo(BigDecimal.ONE) > 0)
             return ExprError.NUM;
 
-        return new ExprDouble(Statistics.critBinom(trials, p, alpha));
+        return new ExprDecimal(Statistics.critBinom(trials, p, alpha));
     }
 }

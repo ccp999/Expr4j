@@ -10,6 +10,7 @@
 package org.boris.expr;
 
 
+
 public class ExprInteger extends ExprNumber
 {
     public static final ExprInteger ZERO = new ExprInteger(0);
@@ -25,10 +26,6 @@ public class ExprInteger extends ExprNumber
         return value;
     }
 
-    public double doubleValue() {
-        return value;
-    }
-
     public int hashCode() {
         return value;
     }
@@ -40,4 +37,10 @@ public class ExprInteger extends ExprNumber
     public String toString() {
         return Integer.toString(value);
     }
+
+    @Override
+    public boolean isDecimal() {
+        return false;
+    }
+
 }

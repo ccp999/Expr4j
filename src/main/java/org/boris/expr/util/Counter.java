@@ -9,14 +9,16 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 
 public class Counter
 {
     public int count;
-    public double value;
-    public double value2;
-    public double value3;
+    public BigDecimal value;
+    public BigDecimal value2;
+    public BigDecimal value3;
     public boolean doit = true;
     public Expr result;
     public int iteration;

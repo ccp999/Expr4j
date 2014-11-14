@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -21,7 +23,7 @@ public class VDB extends AbstractFunction
             return eC;
         if (!isNumber(eC))
             return ExprError.VALUE;
-        double cost = ((ExprNumber) eC).doubleValue();
+        double cost = ((ExprNumber) eC).decimalValue().doubleValue();
 
         // salvage
         Expr eS = evalArg(context, args[1]);
@@ -29,7 +31,7 @@ public class VDB extends AbstractFunction
             return eS;
         if (!isNumber(eS))
             return ExprError.VALUE;
-        double salvage = ((ExprNumber) eS).doubleValue();
+        double salvage = ((ExprNumber) eS).decimalValue().doubleValue();
 
         // life
         Expr eL = evalArg(context, args[2]);
@@ -45,7 +47,7 @@ public class VDB extends AbstractFunction
             return eP0;
         if (!isNumber(eP0))
             return ExprError.VALUE;
-        double start_period = ((ExprNumber) eP0).doubleValue();
+        double start_period = ((ExprNumber) eP0).decimalValue().doubleValue();
 
         // end period
         Expr eP1 = evalArg(context, args[4]);
@@ -53,7 +55,7 @@ public class VDB extends AbstractFunction
             return eP1;
         if (!isNumber(eP1))
             return ExprError.VALUE;
-        double end_period = ((ExprNumber) eP1).doubleValue();
+        double end_period = ((ExprNumber) eP1).decimalValue().doubleValue();
 
         // factor
         double factor = 2;
@@ -63,7 +65,7 @@ public class VDB extends AbstractFunction
                 return eF;
             if (!isNumber(eF))
                 return ExprError.VALUE;
-            factor = ((ExprNumber) eF).doubleValue();
+            factor = ((ExprNumber) eF).decimalValue().doubleValue();
         }
 
         // no switch
@@ -80,6 +82,6 @@ public class VDB extends AbstractFunction
         double vdb = Financials.vdb(cost, salvage, life, start_period,
                 end_period, factor, no_switch);
 
-        return new ExprDouble(vdb);
+        return new ExprDecimal(new BigDecimal(Double.toString(vdb)));
     }
 }

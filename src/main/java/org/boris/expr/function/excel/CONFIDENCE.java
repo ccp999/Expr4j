@@ -1,7 +1,7 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -32,6 +32,6 @@ public class CONFIDENCE extends AbstractFunction
         if (size < 1)
             return ExprError.NUM;
 
-        return new ExprDouble(Statistics.confidence(alpha, stdev, size));
+        return new ExprDecimal(Double.toString(Statistics.confidence(alpha, stdev, size)));
     }
 }

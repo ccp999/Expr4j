@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -25,6 +27,6 @@ public class PERMUT extends AbstractFunction
         if (num < 0 || cho < 0 || num < cho)
             return ExprError.NUM;
 
-        return new ExprDouble(Statistics.permut(num, cho));
+        return new ExprDecimal(new BigDecimal(Double.toString(Statistics.permut(num, cho))));
     }
 }

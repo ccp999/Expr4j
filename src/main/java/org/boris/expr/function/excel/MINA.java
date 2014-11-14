@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.function.ForEachNumberAFunction;
 import org.boris.expr.util.Counter;
@@ -9,15 +11,16 @@ import org.boris.expr.util.Counter;
 public class MINA extends ForEachNumberAFunction
 {
     protected void initialize(Counter counter) throws ExprException {
-        counter.value = Double.MAX_VALUE;
-    }
-
-    protected void value(Counter counter, double value) {
-        if (value < counter.value)
-            counter.value = value;
+        counter.value = new BigDecimal(Double.toString(Double.MAX_VALUE));
     }
 
     protected Expr evaluate(Counter counter) throws ExprException {
-        return new ExprDouble(counter.value);
+        return new ExprDecimal(counter.value);
+    }
+
+    @Override
+    protected void value(Counter counter, BigDecimal value) {
+        if (value.compareTo(value) < 0)
+            counter.value = value;
     }
 }

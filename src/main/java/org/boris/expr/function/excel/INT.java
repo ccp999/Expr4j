@@ -2,7 +2,7 @@ package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -24,9 +24,9 @@ public class INT extends AbstractFunction
             return a;
         } else if (a instanceof ExprBoolean) {
             return new ExprInteger(((ExprNumber) a).intValue());
-        } else if (a instanceof ExprDouble) {
-            return new ExprInteger((int) Math.floor(((ExprDouble) a)
-                    .doubleValue()));
+        } else if (a instanceof ExprDecimal) {
+            return new ExprInteger((int) Math.floor(((ExprDecimal) a).
+                    decimalValue().doubleValue()));
         }
 
         return ExprError.VALUE;

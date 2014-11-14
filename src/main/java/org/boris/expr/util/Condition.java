@@ -15,7 +15,7 @@ import java.util.List;
 import org.boris.expr.AbstractBinaryOperator;
 import org.boris.expr.Expr;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprEqual;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprGreaterThan;
@@ -69,7 +69,7 @@ public class Condition
             operator.setRHS(c.getRHS(s, offset, str));
             c.operators.add(operator);
             return c;
-        } else if (arg instanceof ExprDouble || arg instanceof ExprInteger) {
+        } else if (arg instanceof ExprDecimal || arg instanceof ExprInteger) {
             Condition c = new Condition();
             AbstractBinaryOperator operator = new ExprEqual(null, arg);
             c.operators.add(operator);
@@ -83,8 +83,7 @@ public class Condition
             return new ExprString(text.substring(offset));
         } else {
             try {
-                return new ExprDouble(Double
-                        .parseDouble(text.substring(offset)));
+                return new ExprDecimal(text.substring(offset));
             } catch (NumberFormatException e) {
                 return ExprMissing.MISSING;
             }

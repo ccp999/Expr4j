@@ -3,11 +3,8 @@ package org.boris.expr.function.excel;
 import org.boris.expr.Expr;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
-import org.boris.expr.ExprNumber;
-import org.boris.expr.ExprString;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
-import org.boris.expr.util.ValueFormatter;
 
 public class TEXT extends AbstractFunction
 {
@@ -15,7 +12,8 @@ public class TEXT extends AbstractFunction
             throws ExprException {
         assertArgCount(args, 2);
 
-        Expr eV = evalArg(context, args[0]);
+        //UNIMPLEMENTED....
+/*        Expr eV = evalArg(context, args[0]);
         if (eV instanceof ExprError)
             return eV;
         if (!isNumber(eV))
@@ -30,7 +28,7 @@ public class TEXT extends AbstractFunction
         String res = ValueFormatter.format(value, s);
         if (res != null)
             return new ExprString(res);
-        else
+        else*/
             return ExprError.VALUE;
     }
 }

@@ -29,15 +29,24 @@ public class FORMAT extends AbstractFunction
             expression = ((ExprEvaluatable) expression).evaluate(context);
         }
 
+        if (expression.type == ExprType.Error) {
+            return expression;
+        }
+        
         try {
-            ExprTypes.assertType(expression, ExprType.Double, ExprType.Integer);
+            ExprTypes.assertType(expression, ExprType.Decimal, ExprType.Integer);
         }
         catch (ExprException e) {
             return ExprError.generateError(ExprError.NUM);
         }                                
 
         DecimalFormat decimalFormat = new DecimalFormat(format);
-        decimalFormat.setRoundingMode(java.math.RoundingMode.UP);
-        return new ExprFormatted(decimalFormat.format( ((ExprNumber) expression).doubleValue()));
+        decimalFormat.setRoundingMode(java.math.RoundingMode.HALF_UP);
+        if (((ExprNumber) expression).isDecimal()) {
+            return new ExprFormatted(decimalFormat.format(((ExprNumber) expression).decimalValue()));    
+        }
+        else {
+            return new ExprFormatted(decimalFormat.format(((ExprNumber) expression).intValue()));
+        }        
     }
 }

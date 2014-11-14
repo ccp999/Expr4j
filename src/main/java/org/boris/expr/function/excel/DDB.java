@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -32,9 +34,9 @@ public class DDB extends AbstractFunction
             factor = asDouble(context, args[4], true);
 
         if (cost == 0)
-            return ExprDouble.ZERO;
+            return new ExprDecimal(BigDecimal.ZERO);
 
-        return new ExprDouble(Financials.ddb(cost, salvage, life, period,
-                factor));
+        return new ExprDecimal(Double.toString(Financials.ddb(cost, salvage, life, period,
+                factor)));
     }
 }

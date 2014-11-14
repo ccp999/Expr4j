@@ -17,7 +17,7 @@ public class CONCATENATE extends AbstractFunction
             a = evalArg(context, a);
             if (a instanceof ExprString) {
                 sb.append(((ExprString) a).str);
-            } else if (a instanceof ExprNumber) {
+            } else if (a instanceof ExprNumber) { 
                 sb.append(a.toString());
             }
         }

@@ -1,7 +1,7 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -26,6 +26,6 @@ public class LOG extends AbstractFunction
         if (base == 1)
             return ExprError.DIV0;
 
-        return new ExprDouble(Maths.log(num, base));
+        return new ExprDecimal(Double.toString(Maths.log(num, base)));
     }
 }

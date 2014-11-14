@@ -1,7 +1,7 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -53,7 +53,7 @@ public class COLUMNS extends AbstractFunction
             a = ((ExprEvaluatable) a).evaluate(context);
         }
 
-        if (a instanceof ExprInteger || a instanceof ExprDouble) {
+        if (a instanceof ExprInteger || a instanceof ExprDecimal) {
             return new ExprInteger(1);
         }
 

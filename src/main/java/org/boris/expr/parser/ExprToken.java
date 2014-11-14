@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr.parser;
 
+import java.math.BigDecimal;
+
 public class ExprToken
 {
     public static final ExprToken OPEN_BRACKET = new ExprToken(
@@ -49,27 +51,27 @@ public class ExprToken
 
     public final ExprTokenType type;
     public final String val;
-    public final double doubleValue;
+    public final BigDecimal decimalValue;
     public final int integerValue;
 
     public ExprToken(ExprTokenType type, String val) {
         this.type = type;
         this.val = val;
-        this.doubleValue = 0.;
+        this.decimalValue = BigDecimal.ZERO;
         this.integerValue = 0;
     }
 
-    public ExprToken(String val, double doubleValue) {
+    public ExprToken(String val, BigDecimal decimalValue) {
         this.type = ExprTokenType.Decimal;
         this.val = val;
-        this.doubleValue = doubleValue;
+        this.decimalValue = decimalValue;
         this.integerValue = 0;
     }
 
     public ExprToken(String val, int integerValue) {
         this.type = ExprTokenType.Integer;
         this.val = val;
-        this.doubleValue = 0.;
+        this.decimalValue = BigDecimal.ZERO;
         this.integerValue = integerValue;
     }
 

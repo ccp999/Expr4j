@@ -3,7 +3,7 @@ package org.boris.expr.function.excel;
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -30,7 +30,7 @@ public class COUNT extends AbstractFunction
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
 
-        if (arg instanceof ExprDouble || arg instanceof ExprInteger) {
+        if (arg instanceof ExprDecimal || arg instanceof ExprInteger) {
             return 1;
         } else if (arg instanceof ExprArray) {
             int count = 0;

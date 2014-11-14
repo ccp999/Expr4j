@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -12,6 +14,7 @@ import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprString;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
+import org.boris.expr.util.Counter;
 
 public class STDEV extends AbstractFunction
 {
@@ -29,36 +32,40 @@ public class STDEV extends AbstractFunction
     protected static Expr variance(IEvaluationContext context, Expr[] args,
             boolean allPopulation) throws ExprException {
 
-        double[] values = { 0, 0 };
-
+        Counter counter = new Counter();
+        counter.count = 0;
+        counter.value = BigDecimal.ZERO;
+        
         for (Expr a : args)
-            AVERAGE.eval(context, a, values, true);
+            AVERAGE.eval(context, a, counter, true);
 
-        if (values[1] == 0) {
+        if (counter.count == 0) {
             return ExprError.NUM;
         }
 
-        double average = values[0] / values[1];
+        BigDecimal average = counter.value.divide(new BigDecimal(counter.count), ExprDecimal.MATH_CONTEXT);
 
-        values[0] = values[1] = 0;
+        counter.count = 0;
+        counter.value = BigDecimal.ZERO;
 
         for (Expr a : args)
-            eval(context, a, average, values, true);
+            eval(context, a, average, counter, true);
 
-        return new ExprDouble(values[0] / (values[1] - (allPopulation ? 0 : 1)));
+        int denominator = counter.count - (allPopulation ? 0 : 1);
+        return new ExprDecimal(counter.value.divide(new BigDecimal(denominator, ExprDecimal.MATH_CONTEXT)));
     }
 
     public static Expr stdev(IEvaluationContext context, Expr[] args,
             boolean allPopulation) throws ExprException {
         Expr res = variance(context, args, allPopulation);
-        if (res instanceof ExprDouble) {
-            res = new ExprDouble(Math.sqrt(((ExprDouble) res).doubleValue()));
+        if (res instanceof ExprDecimal) {
+            res = new ExprDecimal(Double.toString(Math.sqrt(((ExprDecimal) res).decimalValue().doubleValue())));
         }
         return res;
     }
 
     protected static void eval(IEvaluationContext context, Expr a,
-            double average, double[] values, boolean strict)
+            BigDecimal average, Counter counter, boolean strict)
             throws ExprException {
         if (a instanceof ExprEvaluatable)
             a = ((ExprEvaluatable) a).evaluate(context);
@@ -76,10 +83,10 @@ public class STDEV extends AbstractFunction
                 return;
         }
 
-        if (a instanceof ExprDouble || a instanceof ExprInteger) {
-            double d = ((ExprNumber) a).doubleValue();
-            values[0] += Math.pow(average - d, 2);
-            values[1] += 1;
+        if (a instanceof ExprDecimal || a instanceof ExprInteger) {
+            BigDecimal d = ((ExprNumber) a).decimalValue();
+            counter.value = counter.value.add(average.subtract(d).pow(2));
+            counter.count++;
             return;
         }
 
@@ -89,7 +96,7 @@ public class STDEV extends AbstractFunction
             int cols = arr.columns();
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    eval(context, arr.get(i, j), average, values, false);
+                    eval(context, arr.get(i, j), average, counter, false);
                 }
             }
 

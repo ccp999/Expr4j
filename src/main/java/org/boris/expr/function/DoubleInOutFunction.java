@@ -10,7 +10,7 @@
 package org.boris.expr.function;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
 
@@ -19,7 +19,7 @@ public abstract class DoubleInOutFunction extends AbstractFunction
     public final Expr evaluate(IEvaluationContext context, Expr[] args)
             throws ExprException {
         assertArgCount(args, 1);
-        return new ExprDouble(evaluate(asDouble(context, args[0], true)));
+        return new ExprDecimal(Double.toString(evaluate(asDouble(context, args[0], true))));
     }
 
     protected abstract double evaluate(double value) throws ExprException;

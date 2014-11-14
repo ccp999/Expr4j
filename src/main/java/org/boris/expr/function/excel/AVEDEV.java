@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -12,6 +14,7 @@ import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprString;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
+import org.boris.expr.util.Counter;
 
 public class AVEDEV extends AbstractFunction
 {
@@ -19,27 +22,30 @@ public class AVEDEV extends AbstractFunction
             throws ExprException {
         assertMinArgCount(args, 1);
 
-        double[] values = { 0, 0 };
-
+        Counter counter = new Counter();
+        counter.count = 0;
+        counter.value = BigDecimal.ZERO;
+        
         for (Expr a : args)
-            AVERAGE.eval(context, a, values, true);
+            AVERAGE.eval(context, a, counter, true);
 
-        if (values[1] == 0) {
+        if (counter.count == 0) {
             return ExprError.NUM;
         }
 
-        double average = values[0] / values[1];
+        BigDecimal average = counter.value.divide(new BigDecimal(counter.count), ExprDecimal.MATH_CONTEXT);
 
-        values[0] = values[1] = 0;
+        counter.count = 0;
+        counter.value = BigDecimal.ZERO;
 
         for (Expr a : args)
-            eval(context, a, average, values, true);
+            eval(context, a, average, counter, true);
 
-        return new ExprDouble(values[0] / values[1]);
+        return new ExprDecimal(counter.value.divide(new BigDecimal(counter.count), ExprDecimal.MATH_CONTEXT));
     }
 
-    public static void eval(IEvaluationContext context, Expr a, double average,
-            double[] values, boolean strict) throws ExprException {
+    public static void eval(IEvaluationContext context, Expr a, BigDecimal average,
+            Counter counter, boolean strict) throws ExprException {
         if (a instanceof ExprEvaluatable)
             a = ((ExprEvaluatable) a).evaluate(context);
 
@@ -56,10 +62,10 @@ public class AVEDEV extends AbstractFunction
                 return;
         }
 
-        if (a instanceof ExprDouble || a instanceof ExprInteger) {
-            double d = ((ExprNumber) a).doubleValue();
-            values[0] += Math.abs(average - d);
-            values[1] += 1;
+        if (a instanceof ExprDecimal || a instanceof ExprInteger) {
+            BigDecimal d = ((ExprNumber) a).decimalValue();
+            counter.value = counter.value.add(average.subtract(d).abs());
+            counter.count++;
             return;
         }
 
@@ -69,7 +75,7 @@ public class AVEDEV extends AbstractFunction
             int cols = arr.columns();
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    eval(context, arr.get(i, j), average, values, false);
+                    eval(context, arr.get(i, j), average, counter, false);
                 }
             }
 

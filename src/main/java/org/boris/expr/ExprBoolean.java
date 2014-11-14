@@ -9,7 +9,6 @@
  *******************************************************************************/
 package org.boris.expr;
 
-
 public class ExprBoolean extends ExprNumber
 {
     public static final ExprBoolean TRUE = new ExprBoolean(true);
@@ -26,10 +25,6 @@ public class ExprBoolean extends ExprNumber
         return value;
     }
 
-    public double doubleValue() {
-        return intValue();
-    }
-
     public int intValue() {
         return value ? 1 : 0;
     }
@@ -44,5 +39,9 @@ public class ExprBoolean extends ExprNumber
 
     public String toString() {
         return Boolean.toString(value).toUpperCase();
+    }
+
+    public boolean isDecimal() {
+        return false;
     }
 }

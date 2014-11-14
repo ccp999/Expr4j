@@ -22,8 +22,10 @@ import org.boris.expr.function.excel.AVERAGE;
 import org.boris.expr.function.excel.CONCATENATE;
 import org.boris.expr.function.excel.FORMAT;
 import org.boris.expr.function.excel.IF;
+import org.boris.expr.function.excel.JOIN;
 import org.boris.expr.function.excel.MAX;
 import org.boris.expr.function.excel.MIN;
+import org.boris.expr.function.excel.PATTERN;
 import org.boris.expr.function.excel.SUM;
 import org.boris.expr.function.excel.TEXTIFY;
 
@@ -40,6 +42,8 @@ public class LiteExcelFunctionProvider implements IFunctionProvider
         functions.put("MAX", new MAX());
         functions.put("FORMAT", new FORMAT());
         functions.put("TEXTIFY", new TEXTIFY());
+        functions.put("JOIN",  new JOIN());
+        functions.put("PATTERN",  new PATTERN());
     }
 
     public boolean hasFunction(ExprFunction function) {

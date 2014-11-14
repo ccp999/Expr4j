@@ -1,7 +1,7 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprString;
@@ -21,10 +21,10 @@ public class INFO extends AbstractFunction
         if ("directory".equalsIgnoreCase(s)) {
             return new ExprString(System.getProperty("user.dir"));
         } else if ("memavail".equalsIgnoreCase(s)) {
-            return new ExprDouble(Runtime.getRuntime().freeMemory());
+            return new ExprDecimal(Double.toString(Runtime.getRuntime().freeMemory()));
         } else if ("memused".equalsIgnoreCase(s)) {
-            return new ExprDouble(Runtime.getRuntime().totalMemory() -
-                    Runtime.getRuntime().freeMemory());
+            return new ExprDecimal(Double.toString(Runtime.getRuntime().totalMemory() -
+                    Runtime.getRuntime().freeMemory()));
         } else if ("numfile".equalsIgnoreCase(s)) {
             return ExprError.REF; // TODO
         } else if ("origin".equalsIgnoreCase(s)) {
@@ -38,7 +38,7 @@ public class INFO extends AbstractFunction
         } else if ("system".equalsIgnoreCase(s)) {
             return ExprError.REF; // TODO
         } else if ("totmem".equalsIgnoreCase(s)) {
-            return new ExprDouble(Runtime.getRuntime().totalMemory());
+            return new ExprDecimal(Double.toString(Runtime.getRuntime().totalMemory()));
         }
 
         return ExprError.VALUE;

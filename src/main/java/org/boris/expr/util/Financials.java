@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
+// NOTE: This class was not converted to use BigDecimal so there is the potential for rounding
+// normal rounding errors associated with doubles 
 public class Financials
 {
     public static double db(double cost, double salvage, int life, int period,

@@ -15,21 +15,27 @@ public class ExprPower extends AbstractMathematicalOperator
         super(ExprType.Power, lhs, rhs);
     }
 
-    protected Expr evaluate(double lhs, double rhs) throws ExprException {
-        return new ExprDouble(Math.pow(lhs, rhs));
-    }
-
+    @Override
+    protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
+        return new ExprDecimal(lhs.decimalValue().pow(rhs.intValue(), ExprDecimal.MATH_CONTEXT));        
+    }      
+    
     public String toString() {
         return lhs + "^" + rhs;
     }
 
     @Override
     protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
-        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
-    }      
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+    }
+
+    @Override
+    protected ExprNumber getDefaultValueForMissing() {
+        return new ExprInteger(1);
+    }
 }

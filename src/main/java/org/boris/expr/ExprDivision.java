@@ -9,22 +9,23 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 public class ExprDivision extends AbstractMathematicalOperator
 {
     public ExprDivision(Expr lhs, Expr rhs) {
         super(ExprType.Division, lhs, rhs);
     }
 
-    protected Expr evaluate(double lhs, double rhs) throws ExprException {
-        if (rhs == 0.) {
+    protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
+        if (rhs.decimalValue().compareTo(BigDecimal.ZERO) == 0) {
             if (this.rhs != null && this.rhs.type == ExprType.Variable) {
                 return ExprError.generateError(ExprError.DIV0, this.rhs.toString());
-            }
-            
-            return ExprError.DIV0;
+            }            
         }
-        return new ExprDouble(lhs / rhs);
-    }
+        
+        return new ExprDecimal(lhs.decimalValue().divide(rhs.decimalValue(), ExprDecimal.MATH_CONTEXT));
+    }    
 
     public String toString() {
         return lhs + "/" + rhs;
@@ -32,11 +33,15 @@ public class ExprDivision extends AbstractMathematicalOperator
 
     @Override
     protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
-        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+    }
+
+    protected ExprNumber getDefaultValueForMissing() {
+        return new ExprInteger(0);
     }   
 }

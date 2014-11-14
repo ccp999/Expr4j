@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.IEvaluationContext;
@@ -19,8 +21,8 @@ public class N extends AbstractFunction
             a = ar.get(0);
         }
         if (a instanceof ExprNumber) {
-            return new ExprDouble(((ExprNumber) a).doubleValue());
+            return new ExprDecimal(((ExprNumber) a).decimalValue());
         }
-        return ExprDouble.ZERO;
+        return new ExprDecimal(BigDecimal.ZERO);
     }
 }

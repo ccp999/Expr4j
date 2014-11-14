@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import org.boris.expr.Expr;
 import org.boris.expr.ExprAddition;
 import org.boris.expr.ExprArray;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprDivision;
-import org.boris.expr.ExprDouble;
 import org.boris.expr.ExprEqual;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprExpression;
@@ -206,7 +206,7 @@ public class ExprParser
         Expr value = null;
         switch (e.type) {
         case Decimal:
-            value = new ExprDouble(e.doubleValue);
+            value = new ExprDecimal(e.decimalValue);
             break;
         case Integer:
             value = new ExprInteger(e.integerValue);

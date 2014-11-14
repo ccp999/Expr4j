@@ -1,7 +1,9 @@
 package org.boris.expr.function;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprNumber;
@@ -23,12 +25,12 @@ public class AbstractVarianceFunction extends ForEachFunction
     protected void iteration(Counter c) {
         switch (c.iteration) {
         case 2:
-            c.value /= c.count;
+            c.value = c.value.divide(new BigDecimal(c.count), ExprDecimal.MATH_CONTEXT);
             break;
         }
     }
 
-    protected void value(Counter counter, double value) {
+    protected void value(Counter counter, BigDecimal value) {
         switch (counter.iteration) {
         case 1:
             average(counter, value);
@@ -39,18 +41,18 @@ public class AbstractVarianceFunction extends ForEachFunction
         }
     }
 
-    private void var(Counter counter, double value) {
-        counter.value2 += Math.pow(value - counter.value, 2);
+    private void var(Counter counter, BigDecimal value) {
+        counter.value2 = counter.value2.add(value.subtract(counter.value).pow(2));
     }
 
-    private void average(Counter counter, double value) {
-        counter.value += value;
+    private void average(Counter counter, BigDecimal value) {
+        counter.value = counter.value.add(value);
         counter.count++;
     }
 
     protected Expr evaluate(Counter counter) throws ExprException {
-        return new ExprDouble(counter.value2 /
-                (counter.count - (allPopulation ? 0 : 1)));
+        BigDecimal count = new BigDecimal(counter.count - (allPopulation ? 0 :1));
+        return new ExprDecimal(counter.value2.divide(count, ExprDecimal.MATH_CONTEXT));        
     }
 
     protected void initialize(Counter counter) throws ExprException {
@@ -59,13 +61,13 @@ public class AbstractVarianceFunction extends ForEachFunction
     protected void value(Counter counter, Expr value) throws ExprException {
         if (includeLogical) {
             if (value instanceof ExprNumber) {
-                value(counter, ((ExprNumber) value).doubleValue());
+                value(counter, ((ExprNumber) value).decimalValue());
             } else if (value instanceof ExprString) {
-                value(counter, 0);
+                value(counter, BigDecimal.ZERO);
             }
         } else {
-            if (value instanceof ExprDouble || value instanceof ExprInteger) {
-                value(counter, ((ExprNumber) value).doubleValue());
+            if (value instanceof ExprDecimal || value instanceof ExprInteger) {
+                value(counter, ((ExprNumber) value).decimalValue());
             }
         }
     }

@@ -1,6 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -34,16 +37,23 @@ public class TEXTIFY extends AbstractFunction
         }
 
         try {
-            ExprTypes.assertType(expression, ExprType.Double, ExprType.Integer);
+            ExprTypes.assertType(expression, ExprType.Decimal, ExprType.Integer);
         }
         catch (ExprException e) {
             return ExprError.generateError(ExprError.NUM);
         }                                
 
-        String text = NumberToText.convert(((ExprNumber) expression).doubleValue());
+        BigDecimal value = ((ExprNumber) expression).decimalValue().setScale(2, BigDecimal.ROUND_HALF_UP);
+        String text = NumberToText.convert(value);
         if (isCurrency) {
-            text = NumberToText.convertToCurrency(text);
+            BigDecimal decimalValue = ((ExprDecimal) expression).decimalValue();
+            BigDecimal scaleValue = decimalValue.remainder(BigDecimal.ONE).multiply(new BigDecimal("100"));
+            
+            boolean singleDollar = decimalValue.compareTo(BigDecimal.ONE) >=0 && decimalValue.compareTo(new BigDecimal("2")) < 0;
+            boolean singleCent = scaleValue.compareTo(BigDecimal.ONE) >=0 && scaleValue.compareTo(new BigDecimal("2")) < 0;
+            
+            text = NumberToText.convertToCurrency(text, singleDollar, singleCent);
         }
-        return new ExprNumberText(text, ((ExprNumber) expression).doubleValue());
+        return new ExprNumberText(text, ((ExprNumber) expression).decimalValue());
     }
 }

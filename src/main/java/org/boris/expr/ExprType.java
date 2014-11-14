@@ -11,6 +11,7 @@ package org.boris.expr;
 
 public enum ExprType
 {
+    Decimal,
     Double,
     Integer,
     Boolean,

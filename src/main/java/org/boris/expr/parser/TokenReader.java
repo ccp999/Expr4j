@@ -47,6 +47,11 @@ public class TokenReader extends Reader
         }
         while (true) {
             char c = (char) r.read();
+            
+            // reset peek value. it is no longer valid once we have read past it
+            // this can happen if peek was set to a whitespace.
+            peek = -1;
+            
             if (!Character.isWhitespace(c)) {
                 return c;
             }

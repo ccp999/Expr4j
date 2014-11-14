@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class Statistics
@@ -21,42 +22,42 @@ public class Statistics
         return n;
     }
 
-    public static double combin(int num, int cho) {
-        return factorial(num).divide(
-                factorial(cho).multiply(factorial(num - cho))).doubleValue();
+    public static BigDecimal combin(int num, int cho) {
+        return new BigDecimal(factorial(num).divide(
+                factorial(cho).multiply(factorial(num - cho))));
     }
 
     public static double permut(int num, int cho) {
         return factorial(num).divide(factorial(num - cho)).doubleValue();
     }
 
-    public static double binomDist(int x, int n, double p, boolean cumulative) {
+    public static BigDecimal binomDist(int x, int n, BigDecimal p, boolean cumulative) {
         if (!cumulative) {
-            return combin(n, x) * Math.pow(p, x) * Math.pow(1 - p, n - x);
+            return combin(n, x).multiply(p.pow(x).multiply(p.subtract(BigDecimal.ONE).pow(n-x)));
         } else {
-            double c = 0;
+            BigDecimal c = BigDecimal.ZERO;
             for (int y = 0; y < x; y++) {
-                c += binomDist(y, n, p, false);
+                c = c.add(binomDist(y, n, p, false));
             }
             return c;
         }
     }
 
-    public static double critBinom(int n, double p, double alpha) {
-        double c = 0;
+    public static BigDecimal critBinom(int n, BigDecimal p, BigDecimal alpha) {
+        BigDecimal c = BigDecimal.ZERO;
         for (int y = 0; y < n; y++) {
-            c += binomDist(y, n, p, false);
-            if (c >= alpha)
-                return y;
+            c = c.add(binomDist(y, n, p, false));
+            if (c.compareTo(alpha) >= 0)
+                return new BigDecimal(y);
         }
-        return 0;
+        return BigDecimal.ZERO;
     }
 
-    public static double exponDist(double x, double lambda, boolean cumulative) {
+    public static BigDecimal exponDist(BigDecimal x, BigDecimal lambda, boolean cumulative) {
         if (cumulative) {
-            return (1 - Math.pow(Math.E, -lambda * x));
+            return BigDecimal.ONE.subtract(new BigDecimal(Double.toString(Math.E)).pow(lambda.negate().multiply(x).intValue()));
         } else {
-            return (lambda * Math.pow(Math.E, -lambda * x));
+            return lambda.multiply(new BigDecimal(Double.toString(Math.E)).pow(lambda.negate().multiply(x).intValue()));
         }
     }
 
@@ -64,22 +65,22 @@ public class Statistics
         return 1.96 * stdev / Math.sqrt(size);
     }
 
-    public static double betaDist(double x, double alpha, double beta,
-            double a, double b) {
-        return 0;
+    public static BigDecimal betaDist(BigDecimal x, BigDecimal alpha, BigDecimal beta,
+                                  BigDecimal a, BigDecimal b) {
+        return BigDecimal.ZERO;
     }
 
-    public static double betaInv(double x, double alpha, double beta, double a,
-            double b) {
-        return 0;
+    public static BigDecimal betaInv(BigDecimal x, BigDecimal alpha, BigDecimal beta, BigDecimal a,
+                                     BigDecimal b) {
+        return BigDecimal.ZERO;
     }
 
-    public static double chiDist(double x, int df) {
-        return 0;
+    public static BigDecimal chiDist(BigDecimal x, int df) {
+        return BigDecimal.ZERO;
     }
 
-    public static double chiInv(double p, int df) {
-        return 0;
+    public static BigDecimal chiInv(BigDecimal p, int df) {
+        return BigDecimal.ZERO;
     }
 
     public static double normDensity(double z) {

@@ -15,21 +15,31 @@ public class ExprMultiplication extends AbstractMathematicalOperator
         super(ExprType.Multiplication, lhs, rhs);
     }
 
-    protected Expr evaluate(double lhs, double rhs) throws ExprException {
-        return new ExprDouble(lhs * rhs);
+    protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
+        if (lhs.isDecimal() || rhs.isDecimal()) {
+            return new ExprDecimal(lhs.decimalValue().multiply(rhs.decimalValue()));
+        }
+        else {
+            return new ExprInteger(lhs.intValue() * rhs.intValue());
+        }
     }
-
+    
     public String toString() {
         return lhs + "*" + rhs;
     }
     
     @Override
     protected ExprError assertTypeLeft(Expr le, Expr re) throws ExprException {
-        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(le, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Double, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+    }
+
+    @Override
+    protected ExprNumber getDefaultValueForMissing() {
+        return new ExprInteger(0);
     }    
 }

@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -25,23 +27,23 @@ public class COVAR extends AbstractFunction
         Expr ea1 = AVERAGE.average(context, array1);
         if (ea1 instanceof ExprError)
             return ea1;
-        double average1 = ((ExprNumber) ea1).doubleValue();
+        BigDecimal average1 = ((ExprNumber) ea1).decimalValue();
 
         Expr ea2 = AVERAGE.average(context, array2);
         if (ea2 instanceof ExprError)
             return ea2;
-        double average2 = ((ExprNumber) ea2).doubleValue();
+        BigDecimal average2 = ((ExprNumber) ea2).decimalValue();
 
         int count = 0;
-        double p = 0;
+        BigDecimal p = BigDecimal.ZERO;
 
         int len = array1.length();
         for (int i = 0; i < len; i++) {
             Expr x = array1.get(i);
             Expr y = array2.get(i);
             if (isNumber(x) && isNumber(y)) {
-                p += (asDouble(context, x, true) - average1) *
-                        (asDouble(context, y, true) - average2);
+                p = p.add((asDecimal(context, x, true).subtract(average1)).multiply(
+                        (asDecimal(context, y, true).subtract(average2))));
                 count++;
             }
         }
@@ -49,6 +51,6 @@ public class COVAR extends AbstractFunction
         if (count == 0)
             return ExprError.DIV0;
 
-        return new ExprDouble(p / count);
+        return new ExprDecimal(p.divide(new BigDecimal(count), ExprDecimal.MATH_CONTEXT));
     }
 }

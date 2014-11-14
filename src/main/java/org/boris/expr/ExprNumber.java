@@ -9,8 +9,12 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 public abstract class ExprNumber extends Expr
 {
+    private BigDecimal decimalValue;
+
     ExprNumber(ExprType type) {
         super(type, false);
     }
@@ -23,6 +27,13 @@ public abstract class ExprNumber extends Expr
     }
 
     public abstract int intValue();
+    public abstract boolean isDecimal();
 
-    public abstract double doubleValue();
+    public BigDecimal decimalValue() {
+        if (this.decimalValue == null) {
+            this.decimalValue = new BigDecimal(intValue());
+        }
+        
+        return this.decimalValue;
+    }
 }

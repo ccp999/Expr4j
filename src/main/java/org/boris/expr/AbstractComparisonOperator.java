@@ -9,23 +9,31 @@
  *******************************************************************************/
 package org.boris.expr;
 
+
 public abstract class AbstractComparisonOperator extends AbstractBinaryOperator
 {
     public AbstractComparisonOperator(ExprType type, Expr lhs, Expr rhs) {
         super(type, lhs, rhs);
     }
 
-    protected double compare(IEvaluationContext context) throws ExprException {
+    protected int compare(IEvaluationContext context) throws ExprException {
         Expr l = eval(lhs, context);
         Expr r = eval(rhs, context);
 
         if (l instanceof ExprString || r instanceof ExprString) {
-            return l.toString().compareTo(r.toString());
+            String lStr = l.toString();
+            String rStr = r.toString();
+            
+            return lStr.compareTo(rStr);
         }
 
-        if (l instanceof ExprNumber && r instanceof ExprNumber) {
-            return (((ExprNumber) l).doubleValue() - ((ExprNumber) r)
-                    .doubleValue());
+        if (l instanceof ExprDecimal && r instanceof ExprDecimal) {
+            return ((ExprDecimal) l).decimalValue().compareTo( ((ExprDecimal) r).decimalValue());
+        }
+
+        else if (l instanceof ExprNumber && r instanceof ExprNumber) {
+            return (((ExprNumber) l).intValue() - ((ExprNumber) r)
+                    .intValue());
         }
 
         return 0;

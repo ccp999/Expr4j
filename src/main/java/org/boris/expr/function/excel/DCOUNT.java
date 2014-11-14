@@ -1,8 +1,8 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.SimpleDatabaseFunction;
@@ -16,6 +16,6 @@ public class DCOUNT extends SimpleDatabaseFunction
             if (m instanceof ExprNumber)
                 count++;
         }
-        return new ExprDouble(count);
+        return new ExprInteger(count);
     }
 }

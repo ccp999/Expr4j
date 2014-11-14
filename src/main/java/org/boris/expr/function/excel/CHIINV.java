@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -17,8 +19,8 @@ public class CHIINV extends AbstractFunction
         Expr eP = evalArg(context, args[0]);
         if (!isNumber(eP))
             return ExprError.VALUE;
-        double p = ((ExprNumber) eP).doubleValue();
-        if (p < 0 || p > 1)
+        BigDecimal p = ((ExprNumber) eP).decimalValue();
+        if (p.compareTo(BigDecimal.ZERO) < 0 || p.compareTo(BigDecimal.ONE) > 0)
             return ExprError.NUM;
         Expr eDF = evalArg(context, args[1]);
         if (!isNumber(eDF))
@@ -26,6 +28,6 @@ public class CHIINV extends AbstractFunction
         int df = ((ExprNumber) eDF).intValue();
         if (df < 0 || df > 10e10)
             return ExprError.NUM;
-        return new ExprDouble(Statistics.chiInv(p, df));
+        return new ExprDecimal(Statistics.chiInv(p, df));
     }
 }

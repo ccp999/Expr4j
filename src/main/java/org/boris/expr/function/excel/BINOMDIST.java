@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -29,14 +31,14 @@ public class BINOMDIST extends AbstractFunction
         Expr ep = evalArg(context, args[2]);
         if (!isNumber(ep))
             return ExprError.VALUE;
-        double p = ((ExprNumber) ep).doubleValue();
-        if (p < 0 || p > 1)
+        BigDecimal p = ((ExprNumber) ep).decimalValue();
+        if (p.compareTo(BigDecimal.ZERO) < 0 || p.compareTo(BigDecimal.ONE) > 0)
             return ExprError.NUM;
         Expr ec = evalArg(context, args[3]);
         if (!(ec instanceof ExprNumber))
             return ExprError.VALUE;
         boolean c = ((ExprNumber) ec).booleanValue();
 
-        return new ExprDouble(Statistics.binomDist(nums, trials, p, c));
+        return new ExprDecimal(Statistics.binomDist(nums, trials, p, c));
     }
 }

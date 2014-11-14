@@ -2,7 +2,7 @@ package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
 import org.boris.expr.ExprNumber;
@@ -21,8 +21,8 @@ public class FREQUENCY extends AbstractFunction
 
     double[] asArray(IEvaluationContext context, Expr vals)
             throws ExprException {
-        if (vals instanceof ExprInteger || vals instanceof ExprDouble) {
-            return new double[] { ((ExprNumber) vals).doubleValue() };
+        if (vals instanceof ExprInteger || vals instanceof ExprDecimal) {
+            return new double[] { ((ExprNumber) vals).decimalValue().doubleValue() };
         } else if (vals instanceof ExprArray) {
             ExprArray a = (ExprArray) vals;
             double[] arr = new double[a.length()];
@@ -30,7 +30,7 @@ public class FREQUENCY extends AbstractFunction
             for (int i = 0; i < arr.length; i++) {
                 Expr e = evalArg(context, a.get(i));
                 if (e instanceof ExprNumber) {
-                    arr[index++] = ((ExprNumber) e).doubleValue();
+                    arr[index++] = ((ExprNumber) e).decimalValue().doubleValue();
                 }
             }
             if (arr.length == index)

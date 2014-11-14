@@ -13,11 +13,16 @@ package org.boris.expr;
 public class ExprMissing extends Expr
 {
     public static final ExprMissing MISSING = new ExprMissing();
-
+    
     public ExprMissing() {
         super(ExprType.Missing, false);
     }
 
+    public ExprMissing(boolean cancelEvalOnMissing) {
+        super(ExprType.Missing, false);
+        this.cancelEvalOnMissing = true;
+    }
+       
     public String toString() {
         return "";
     }

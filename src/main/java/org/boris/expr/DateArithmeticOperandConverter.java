@@ -9,8 +9,10 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 public class DateArithmeticOperandConverter implements IOperandConversionVisitor {
-    private static int MILLISECONDS_IN_DAY = (1000 * 60 * 60 * 24);
+    private static BigDecimal MILLISECONDS_IN_DAY = new BigDecimal(Integer.toString(1000 * 60 * 60 * 24));
     
     @Override
     public void convertOperands(Operands operands) {
@@ -22,15 +24,15 @@ public class DateArithmeticOperandConverter implements IOperandConversionVisitor
             ExprDate lExprDate = (ExprDate) operands.getLeftOperand();
             ExprDate rExprDate = (ExprDate) operands.getRightOperand();
             
-            operands.setLeftOperand(new ExprDouble(lExprDate.doubleValue() / MILLISECONDS_IN_DAY));
-            operands.setRightOperand(new ExprDouble(rExprDate.doubleValue() / MILLISECONDS_IN_DAY));
+            operands.setLeftOperand(new ExprDecimal(lExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
+            operands.setRightOperand(new ExprDecimal(rExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
         }        
-        // If left operand is a date and right is a double, we need to convert the right operand
+        // If left operand is a date and right is a decimal, we need to convert the right operand
         // to milliseconds because we are adding days to a date.
         else if (operands.getLeftOperand() != null && operands.getLeftOperand().type == ExprType.Date
                 && operands.getRightOperand() instanceof ExprNumber) {
             ExprNumber exprNumber = (ExprNumber) operands.getRightOperand();
-            operands.setRightOperand(new ExprDouble(exprNumber.doubleValue() * MILLISECONDS_IN_DAY));
+            operands.setRightOperand(new ExprDecimal(exprNumber.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
         }
     }
 }

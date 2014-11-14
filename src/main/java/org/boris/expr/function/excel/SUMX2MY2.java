@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -27,16 +29,16 @@ public class SUMX2MY2 extends AbstractFunction
             return ExprError.NA;
 
         int len = arrayX.length();
-        double sum = 0;
+        BigDecimal sum = BigDecimal.ZERO;
         for (int i = 0; i < len; i++) {
-            sum += eval(asDouble(context, arrayX, i), asDouble(context, arrayY,
-                    i));
+            sum = sum.add(eval(asDecimal(context, arrayX, i), asDecimal(context, arrayY,
+                    i)));
         }
 
-        return new ExprDouble(sum);
+        return new ExprDecimal(sum);
     }
 
-    protected double eval(double x, double y) {
-        return Math.pow(x, 2) - Math.pow(y, 2);
+    protected BigDecimal eval(BigDecimal x, BigDecimal y) {
+        return x.pow(2).subtract(y.pow(2));
     }
 }

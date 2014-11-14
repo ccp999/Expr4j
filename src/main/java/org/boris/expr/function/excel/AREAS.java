@@ -1,7 +1,7 @@
 package org.boris.expr.function.excel;
 
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprVariable;
 import org.boris.expr.IEvaluationContext;
@@ -13,7 +13,7 @@ public class AREAS extends AbstractFunction
         assertArgCount(args, 1);
         Expr e = args[0];
         if (e instanceof ExprVariable) {
-            return new ExprDouble(1);
+            return new ExprDecimal("1");
         }
         return null;
     }

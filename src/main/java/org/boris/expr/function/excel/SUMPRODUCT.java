@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprInteger;
@@ -28,22 +30,22 @@ public class SUMPRODUCT extends AbstractFunction
             }
         }
 
-        double sum = 0;
+        BigDecimal sum = BigDecimal.ZERO;
 
         for (int i = 0; i < len; i++) {
-            double p = 1;
+            BigDecimal p = BigDecimal.ONE;
             for (int j = 0; j < ea.length; j++) {
                 Expr a = get(ea[j], i);
-                if (a instanceof ExprDouble || a instanceof ExprInteger) {
-                    p *= ((ExprNumber) a).doubleValue();
+                if (a instanceof ExprDecimal || a instanceof ExprInteger) {
+                    p = p.multiply(((ExprNumber) a).decimalValue());
                 } else {
-                    p = 0;
+                    p = BigDecimal.ZERO;
                     break;
                 }
             }
-            sum += p;
+            sum = sum.add(p);
         }
 
-        return new ExprDouble(sum);
+        return new ExprDecimal(sum);
     }
 }

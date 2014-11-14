@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.math.BigDecimal;
 
 public class ExprLexer
 {
@@ -187,13 +188,13 @@ public class ExprLexer
 
         String val = sb.toString();
         if (decimal) {
-            return new ExprToken(val, Double.parseDouble(val));
+            return new ExprToken(val, new BigDecimal(val));
         } else {
             try {
                 return new ExprToken(val, Integer.parseInt(val));
             } catch (NumberFormatException e) {
                 // Catch very large numbers
-                return new ExprToken(val, Double.parseDouble(val));
+                return new ExprToken(val, new BigDecimal(val));
             }
         }
     }

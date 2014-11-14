@@ -9,10 +9,12 @@
  *******************************************************************************/
 package org.boris.expr.function;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
 import org.boris.expr.ExprBoolean;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprEvaluationException;
@@ -53,16 +55,34 @@ public abstract class AbstractFunction implements IExprFunction
         }
     }
 
-    protected double asDouble(IEvaluationContext context, Expr arg,
+    protected double asDouble(IEvaluationContext context, Expr arg, boolean strict) throws ExprException {
+        if (arg instanceof ExprEvaluatable) {
+            arg = ((ExprEvaluatable) arg).evaluate(context);
+        }
+        if (arg instanceof ExprNumber) {
+            return ((ExprNumber) arg).decimalValue().doubleValue();
+        }
+        if (!strict) return 0;
+        throw new FunctionValidationException("Invalid argument type for function " + getClass().getSimpleName());
+    }
+    
+    protected double asDouble(IEvaluationContext context, ExprArray knownY, int index) throws ExprException {
+        if (index < 0 || index >= knownY.length()) return 0;
+
+        Expr e = knownY.get(index);
+        return asDouble(context, e, false);
+    }
+    
+    protected BigDecimal asDecimal(IEvaluationContext context, Expr arg,
             boolean strict) throws ExprException {
         if (arg instanceof ExprEvaluatable) {
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
         if (arg instanceof ExprNumber) {
-            return ((ExprNumber) arg).doubleValue();
+            return ((ExprNumber) arg).decimalValue();
         }
         if (!strict)
-            return 0;
+            return BigDecimal.ZERO;
         throw new FunctionValidationException("Invalid argument type for function " +
                 getClass().getSimpleName());
     }
@@ -180,13 +200,13 @@ public abstract class AbstractFunction implements IExprFunction
         return bool ? ExprBoolean.TRUE : ExprBoolean.FALSE;
     }
 
-    protected double asDouble(IEvaluationContext context, ExprArray knownY,
+    protected BigDecimal asDecimal(IEvaluationContext context, ExprArray knownY,
             int index) throws ExprException {
         if (index < 0 || index >= knownY.length())
-            return 0;
+            return new BigDecimal("0");
 
         Expr e = knownY.get(index);
-        return asDouble(context, e, false);
+        return asDecimal(context, e, false);
     }
 
     protected boolean isOneOf(Expr expr, ExprType... types) {
@@ -248,6 +268,6 @@ public abstract class AbstractFunction implements IExprFunction
     }
     
     protected boolean isNumber(Expr x) {
-        return x instanceof ExprDouble || x instanceof ExprInteger;
+        return x instanceof ExprDecimal || x instanceof ExprInteger;
     }
 }

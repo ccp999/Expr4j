@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -21,18 +23,19 @@ public class MIN extends AbstractFunction
 
     public static Expr min(IEvaluationContext context, Expr[] args)
             throws ExprException {
-        double d = Double.MAX_VALUE;
+        BigDecimal d = new BigDecimal(Double.toString(Double.MAX_VALUE));
+        
         for (Expr a : args) {
             Expr res = min(context, a);
             if (res instanceof ExprError) {
                 return res;
             } else {
-                double r = ((ExprDouble) res).doubleValue();
-                if (r < d)
+                BigDecimal r = ((ExprDecimal) res).decimalValue();
+                if (r.compareTo(d) < 0)
                     d = r;
             }
         }
-        return new ExprDouble(d);
+        return new ExprDecimal(d);
     }
 
     public static Expr min(IEvaluationContext context, Expr arg)
@@ -42,10 +45,10 @@ public class MIN extends AbstractFunction
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
 
-        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Double, ExprType.Integer, ExprType.Array);
+        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);
         
         if (arg instanceof ExprNumber) {
-            return new ExprDouble(((ExprNumber) arg).doubleValue());
+            return new ExprDecimal(((ExprNumber) arg).decimalValue());
         }
 
         if (arg instanceof ExprArray) {

@@ -1,8 +1,10 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprArray;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
@@ -21,13 +23,14 @@ public class SUM extends AbstractFunction
 
     public static Expr sum(IEvaluationContext context, Expr[] args)
             throws ExprException {
-        double res = 0;
+        BigDecimal res = BigDecimal.ZERO;
+        
         for (Expr arg : args)
-            res += sum(context, arg);
-        return new ExprDouble(res);
+            res = res.add(sum(context, arg));
+        return new ExprDecimal(res);
     }
 
-    public static double sum(IEvaluationContext context, Expr arg)
+    public static BigDecimal sum(IEvaluationContext context, Expr arg)
             throws ExprException {
         String variableName = getVariableName(arg);
         
@@ -35,23 +38,23 @@ public class SUM extends AbstractFunction
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
                 
-        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Double, ExprType.Integer, ExprType.Array);
+        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);
         
         if (arg instanceof ExprNumber) {
-            return ((ExprNumber) arg).doubleValue();
+            return ((ExprNumber) arg).decimalValue();
         } else if (arg instanceof ExprArray) {
             ExprArray a = (ExprArray) arg;
             int rows = a.rows();
             int cols = a.columns();
-            double res = 0;
+            BigDecimal res = BigDecimal.ZERO;
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < cols; j++) {
-                    res += sum(context, a.get(i, j));
+                    res = res.add(sum(context, a.get(i, j)));
                 }
             }
             return res;
         }
         
-        return 0;
+        return BigDecimal.ZERO;
     }
 }

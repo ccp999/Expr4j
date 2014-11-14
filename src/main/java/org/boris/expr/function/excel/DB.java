@@ -1,7 +1,9 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDouble;
+import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
@@ -34,8 +36,8 @@ public class DB extends AbstractFunction
             return ExprError.NUM;
 
         if (cost == 0)
-            return ExprDouble.ZERO;
+            return new ExprDecimal(BigDecimal.ZERO);
 
-        return new ExprDouble(Financials.db(cost, salvage, life, period, month));
+        return new ExprDecimal(new BigDecimal(Double.toString(Financials.db(cost, salvage, life, period, month))));
     }
 }

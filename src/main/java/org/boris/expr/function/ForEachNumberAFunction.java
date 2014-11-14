@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr.function;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprException;
 import org.boris.expr.ExprNumber;
@@ -26,11 +28,11 @@ public abstract class ForEachNumberAFunction extends ForEachFunction
     protected final void value(Counter counter, Expr value)
             throws ExprException {
         if (value instanceof ExprNumber) {
-            value(counter, ((ExprNumber) value).doubleValue());
+            value(counter, ((ExprNumber) value).decimalValue());
         } else if (value instanceof ExprString) {
-            value(counter, 0);
+            value(counter, BigDecimal.ZERO);
         }
     }
 
-    protected abstract void value(Counter counter, double value);
+    protected abstract void value(Counter counter, BigDecimal value);
 }
