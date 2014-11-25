@@ -22,6 +22,10 @@ import org.boris.expr.util.IO;
 
 public class TH extends TestCase
 {
+    public void testTemp() {
+        
+    }
+    
     public static void assertException(String expression) throws Exception {
         try {
             BasicEvaluationCallback b = new BasicEvaluationCallback();

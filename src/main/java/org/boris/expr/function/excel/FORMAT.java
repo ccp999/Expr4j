@@ -29,7 +29,7 @@ public class FORMAT extends AbstractFunction
             expression = ((ExprEvaluatable) expression).evaluate(context);
         }
 
-        if (expression.type == ExprType.Error) {
+        if (expression.type == ExprType.Error || expression.type == ExprType.Missing) {
             return expression;
         }
         

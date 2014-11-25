@@ -17,12 +17,7 @@ public class ExprSubtraction extends AbstractMathematicalOperator
     }
 
     protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
-        if (lhs.isDecimal() || rhs.isDecimal()) {
-            return new ExprDecimal(lhs.decimalValue().subtract(rhs.decimalValue()));
-        }
-        else {
-            return new ExprInteger(lhs.intValue() - rhs.intValue());
-        }
+        return new ExprDecimal(lhs.decimalValue().subtract(rhs.decimalValue()));
     }
     
     public void validate() throws ExprException {

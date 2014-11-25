@@ -56,7 +56,7 @@ public class ExprDecimal extends ExprNumber
 
     public boolean equals(Object obj) {
         if (obj instanceof ExprDecimal) {
-            return ((BigDecimal) obj).compareTo(this.value) == 0;
+            return ((ExprDecimal) obj).decimalValue().compareTo(this.value) == 0;
         }
         else {
             return false;

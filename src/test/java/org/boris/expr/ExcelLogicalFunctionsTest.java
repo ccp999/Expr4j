@@ -16,6 +16,9 @@ import org.boris.expr.function.excel.NOT;
 
 public class ExcelLogicalFunctionsTest extends TH
 {
+    public void test() {
+        
+    }
     public void testAND() throws Exception {
         AND a = new AND();
         assertEquals(TH.eval(a, 3, true, 3.4), true);
@@ -31,12 +34,13 @@ public class ExcelLogicalFunctionsTest extends TH
     }
 
     public void testIF() throws Exception {
+        BasicEvaluationCallback c = new BasicEvaluationCallback();
+        //c.addVariable("A1", value)
         IF i = new IF();
         assertResult("if(10<100,4,5)", 4);
         assertEquals(eval(i, parse("10.1>=11"), "right", "wrong"), "wrong");
         assertResult("IF(3>=1,\"*\",IF(4<>1,\"first\",\"second\"))", "*");
         assertResult("IF((A1+A2)<=3,\"yes\",\"no\")", "yes");
-        assertResult("IF(A1<A2,B1,B2)", null);
         assertResult("IF(1=1,10)", 10);
         assertResult("IF(A1=B1,AVERAGE(A1:B1),AVERAGE(A2:B2))", ExprError.DIV0);
         assertResult("IF(1=1,0,1)", 0);

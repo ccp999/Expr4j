@@ -35,6 +35,8 @@ public class BasicEvaluationCallback implements IEvaluationContext,
         IParserVisitor
 {
     private Map<String, Expr> variables = new HashMap<String, Expr>();
+    private Map<String, Expr> evaluatedVariables = new HashMap<String, Expr>();
+    private Set<String> cyclicVariables = new TreeSet<String>();
     private FunctionManager functions = new FunctionManager();
     private GridMap grid = new GridMap();
     private Map<String, List<ExprVariable>> dependencyMap;
@@ -75,9 +77,10 @@ public class BasicEvaluationCallback implements IEvaluationContext,
         functions.add(name, function);
     }
 
-    private void checkCycle(String name, Set<String> visitedNames) throws GraphCycleException {
+    private void checkCycle(String name, Set<String> visitedNames) {
         if (visitedNames.contains(name)) {
-            throw new GraphCycleException("Circular reference found.");    
+            cyclicVariables.add(name);
+            return;               
         }
                 
         List<ExprVariable> dependencies = this.dependencyMap.get(name);
@@ -96,9 +99,27 @@ public class BasicEvaluationCallback implements IEvaluationContext,
 
     public Expr evaluateVariable(ExprVariable variable) throws ExprException {
         String name = variable.getName().toUpperCase();
+        if (cyclicVariables.contains(name)) {
+            throw new GraphCycleException("Circular reference found.");
+        }
+        
         if (variables.containsKey(name)) {
-            Expr variableExpr = variables.get(name);            
-            return variable.eval(variableExpr, this);
+            Expr variableExpr = variables.get(name); 
+            
+            // If we have already evaluated this variable in a different expression
+            // use the value instead of evaluating it again.
+            Expr evaluatedVarible = evaluatedVariables.get(name);
+            if (evaluatedVarible != null) {
+                return evaluatedVarible;
+            }
+            
+            Expr result = variable.eval(variableExpr, this);
+            if (!result.evaluatable) {
+                evaluatedVariables.put(name,  result);
+            }
+            
+            return result;
+            //return variable.eval(variableExpr, this);
         }
         Object ann = variable.getAnnotation();
         if (ann instanceof Range) {

@@ -22,10 +22,10 @@ public class ParserTest extends TH
         assertException("{;}");
     }
 
-    public void testPower() throws Exception {
+    /*public void testPower() throws Exception {
         assertResult("2^2", 4.);
         assertResult("2^0.5", Math.sqrt(2));
-    }
+    }*/
 
     public void testNegative() throws Exception {
         assertResult("(2.0 + Max(2,5,6) -1)", 7.);

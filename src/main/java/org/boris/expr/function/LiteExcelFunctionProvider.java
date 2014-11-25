@@ -31,7 +31,7 @@ import org.boris.expr.function.excel.TEXTIFY;
 
 public class LiteExcelFunctionProvider implements IFunctionProvider
 {
-    private static Map<String, IExprFunction> functions = new HashMap();
+    private static Map<String, IExprFunction> functions = new HashMap<>();
 
     static {
         functions.put("AVERAGE", new AVERAGE());

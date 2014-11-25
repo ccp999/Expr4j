@@ -1,20 +1,17 @@
 package org.boris.expr.function.excel;
 
-import java.math.BigDecimal;
-
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDecimal;
-import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
-import org.boris.expr.util.Financials;
 
 public class DDB extends AbstractFunction
 {
     public Expr evaluate(IEvaluationContext context, Expr[] args)
             throws ExprException {
-        assertMinArgCount(args, 4);
+        // NOT IMPLEMENTED CORRECTLY
+        
+/*        assertMinArgCount(args, 4);
         assertMaxArgCount(args, 5);
 
         double cost = asDouble(context, args[0], true);
@@ -37,6 +34,7 @@ public class DDB extends AbstractFunction
             return new ExprDecimal(BigDecimal.ZERO);
 
         return new ExprDecimal(Double.toString(Financials.ddb(cost, salvage, life, period,
-                factor)));
+                factor)));*/
+        return null;
     }
 }

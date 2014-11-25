@@ -71,7 +71,7 @@ public class ExprTest extends TH
 
     private BasicEvaluationCallback c() throws GraphCycleException {
         BasicEvaluationCallback c = new BasicEvaluationCallback();
-        c.addVariable("X", new ExprDouble(5.3));
+        c.addVariable("X", new ExprDecimal("5.3"));
         return c;
     }
 }

@@ -171,7 +171,15 @@ public class NumberToText {
         // If there is a decimal, convert that too
         if (scaleValue.compareTo(BigDecimal.ZERO) > 0) {
             String convertedDecimal = convertNumber(scaleValue);
-            return convertedNumber + " point " + convertedDecimal;
+            
+            // If scale value is less than 10 we need to add point 
+            // i.e. 5.02 should be point zero two because point two would imply 5.20
+            if (scaleValue.compareTo(BigDecimal.TEN) < 0) {
+                return convertedNumber + " point zero " +  convertedDecimal;
+            }
+            else {
+                return convertedNumber + " point " +  convertedDecimal;
+            }
         } else {
             return convertedNumber;
         }
@@ -184,9 +192,21 @@ public class NumberToText {
      * @param text
      * @return
      */
-    public static String convertToCurrency(String text, boolean singleDollar, boolean singleCent) {
-        if (text.indexOf("point") > 0) {
-            return text.replace("point", "dollar" + (singleDollar == false ? "s" : "") + " and") + " cent"
+    public static String convertToCurrency(String text, BigDecimal value) {
+        BigDecimal scaleValue = value.remainder(BigDecimal.ONE).multiply(new BigDecimal("100"));
+        boolean singleDollar = value.compareTo(BigDecimal.ONE) >=0 && value.compareTo(new BigDecimal("2")) < 0;
+        boolean singleCent = scaleValue.compareTo(BigDecimal.ONE) >=0 && scaleValue.compareTo(new BigDecimal("2")) < 0;
+        boolean lessThanDime = scaleValue.compareTo(BigDecimal.TEN) <0;
+        
+        if (text.indexOf("point") > 0) {       
+            String wordsToReplace = "point";
+
+            // If scale value is less than 10 we need to undo the zero before point 
+            // i.e. 5.02 will be point zero two because point two would imply 5.20            
+            if (lessThanDime) {
+                wordsToReplace = "point zero";
+            }
+            return text.replaceAll(wordsToReplace, "dollar" + (singleDollar == false ? "s" : "") + " and") + " cent"
                     + (singleCent == false ? "s" : "");
         }
         else {

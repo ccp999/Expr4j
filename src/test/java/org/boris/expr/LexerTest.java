@@ -9,17 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
-import static org.boris.expr.parser.ExprTokenType.CloseBrace;
-import static org.boris.expr.parser.ExprTokenType.Comma;
-import static org.boris.expr.parser.ExprTokenType.Decimal;
-import static org.boris.expr.parser.ExprTokenType.Integer;
-import static org.boris.expr.parser.ExprTokenType.Multiply;
-import static org.boris.expr.parser.ExprTokenType.OpenBrace;
-import static org.boris.expr.parser.ExprTokenType.Power;
-import static org.boris.expr.parser.ExprTokenType.SemiColon;
-import static org.boris.expr.parser.ExprTokenType.String;
-import static org.boris.expr.parser.ExprTokenType.StringConcat;
-import static org.boris.expr.parser.ExprTokenType.Variable;
+import static org.boris.expr.parser.ExprTokenType.*;
 
 import java.io.IOException;
 
@@ -44,10 +34,10 @@ public class LexerTest extends TestCase
         assertTypes("'Quotes Needed Here &#$@'!A1", Variable);
     }
 
-    public void testOperators() throws Exception {
+/*    public void testOperators() throws Exception {
         assertTypes("23^2", Integer, Power, Integer);
     }
-
+*/
     public void testArrays() throws Exception {
         assertTypes("{12,34}", OpenBrace, Integer, Comma, Integer, CloseBrace);
         assertTypes("{12;34}", OpenBrace, Integer, SemiColon, Integer,

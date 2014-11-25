@@ -20,7 +20,7 @@ public class MINA extends ForEachNumberAFunction
 
     @Override
     protected void value(Counter counter, BigDecimal value) {
-        if (value.compareTo(value) < 0)
+        if (value.compareTo(counter.value) < 0)
             counter.value = value;
     }
 }

@@ -52,7 +52,7 @@ public class STDEV extends AbstractFunction
             eval(context, a, average, counter, true);
 
         int denominator = counter.count - (allPopulation ? 0 : 1);
-        return new ExprDecimal(counter.value.divide(new BigDecimal(denominator, ExprDecimal.MATH_CONTEXT)));
+        return new ExprDecimal(counter.value.divide(new BigDecimal(denominator), ExprDecimal.MATH_CONTEXT));
     }
 
     public static Expr stdev(IEvaluationContext context, Expr[] args,

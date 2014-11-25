@@ -16,7 +16,7 @@ import java.util.Date;
 public class ExprDate extends ExprDecimal
 {
     public ExprDate(Date value) {
-        super(ExprType.Date, Double.toString(value.getTime()));
+        super(ExprType.Date, Long.toString(value.getTime()));
         this.cancelEvalOnMissing = true;
     }
     

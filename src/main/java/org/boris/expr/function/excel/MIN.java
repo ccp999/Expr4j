@@ -8,6 +8,7 @@ import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprMissing;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
@@ -24,6 +25,10 @@ public class MIN extends AbstractFunction
     public static Expr min(IEvaluationContext context, Expr[] args)
             throws ExprException {
         BigDecimal d = new BigDecimal(Double.toString(Double.MAX_VALUE));
+        
+        if (allArgsMissing(context, args)) {
+            return new ExprMissing();
+        }
         
         for (Expr a : args) {
             Expr res = min(context, a);
@@ -43,6 +48,10 @@ public class MIN extends AbstractFunction
         String variableName = getVariableName(arg);
         if (arg instanceof ExprEvaluatable) {
             arg = ((ExprEvaluatable) arg).evaluate(context);
+        }
+        
+        if (arg != null && arg.type == ExprType.Missing) {
+            return new ExprDecimal(Double.toString(Double.MAX_VALUE));
         }
 
         validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);

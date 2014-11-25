@@ -259,6 +259,22 @@ public abstract class AbstractFunction implements IExprFunction
         throw new ExprEvaluationException(validationError);        
     }
     
+    protected static boolean allArgsMissing(IEvaluationContext context, Expr[] args) throws ExprException {
+        for (Expr arg : args) {
+            if (arg instanceof ExprEvaluatable) {
+                arg = ((ExprEvaluatable) arg).evaluate(context);
+                if (arg != null && arg.type != ExprType.Missing) {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public static String getVariableName(Expr arg) {
         if (arg != null && arg.type == ExprType.Variable) {
             return arg.toString();

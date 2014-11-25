@@ -86,9 +86,9 @@ public class ExprLexer
         case ';':
             lastChar = 0;
             return ExprToken.SEMI_COLON;
-        case '^':
+        /*case '^':
             lastChar = 0;
-            return ExprToken.POWER;
+            return ExprToken.POWER;*/
         case -1:
         case 0xffff:
             return null;

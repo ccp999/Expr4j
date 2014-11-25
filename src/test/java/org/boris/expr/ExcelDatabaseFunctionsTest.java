@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.util.Criteria;
 import org.boris.expr.util.Database;
 
@@ -28,11 +30,11 @@ public class ExcelDatabaseFunctionsTest extends TH
     }
 
     public void testDCOUNT() throws Exception {
-        assertResult(c(), "DCOUNT(A4:E10,\"Age\",A1:F2)", 1.);
+        assertResult(c(), "DCOUNT(A4:E10,\"Age\",A1:F2)", new ExprInteger(1));
     }
 
     public void testDCOUNTA() throws Exception {
-        assertResult(c(), "DCOUNTA(A4:E10,\"Age\",A1:F2)", 1.);
+        assertResult(c(), "DCOUNTA(A4:E10,\"Age\",A1:F2)", new ExprInteger(1));
     }
 
     public void testDGET() throws Exception {
@@ -52,11 +54,11 @@ public class ExcelDatabaseFunctionsTest extends TH
     }
 
     public void testDSTDEV() throws Exception {
-        assertResult(c(), "DSTDEV(A4:E10,\"Yield\",A1:A3)", 2.96647939483826);
+        assertResult(c(), "DSTDEV(A4:E10,\"Yield\",A1:A3)", 2.9664793948382653);
     }
 
-    public void testDSTDEVP() throws Exception {
-        assertResult(c(), "DSTDEVP(A4:E10,\"Yield\",A1:A3)", 2.65329983228432);
+    public void testDSTDEVP() throws Exception {        
+        assertResult(c(), "DSTDEVP(A4:E10,\"Yield\",A1:A3)", new ExprDecimal(new BigDecimal("2.6532998322843198")));
     }
 
     public void testDSUM() throws Exception {

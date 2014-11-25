@@ -16,26 +16,30 @@ public abstract class AbstractComparisonOperator extends AbstractBinaryOperator
         super(type, lhs, rhs);
     }
 
-    protected int compare(IEvaluationContext context) throws ExprException {
+    protected Expr compare(IEvaluationContext context) throws ExprException {
         Expr l = eval(lhs, context);
         Expr r = eval(rhs, context);
 
-        if (l instanceof ExprString || r instanceof ExprString) {
+        if (l.getType() == ExprType.Missing || r.getType() == ExprType.Missing) {
+            return new ExprMissing();
+        }
+        else if (l instanceof ExprString || r instanceof ExprString) {
             String lStr = l.toString();
             String rStr = r.toString();
             
-            return lStr.compareTo(rStr);
+            return new ExprInteger(lStr.compareTo(rStr));
         }
 
         if (l instanceof ExprDecimal && r instanceof ExprDecimal) {
-            return ((ExprDecimal) l).decimalValue().compareTo( ((ExprDecimal) r).decimalValue());
+            int result =  ((ExprDecimal) l).decimalValue().compareTo( ((ExprDecimal) r).decimalValue());
+            return new ExprInteger(result);
         }
 
         else if (l instanceof ExprNumber && r instanceof ExprNumber) {
-            return (((ExprNumber) l).intValue() - ((ExprNumber) r)
-                    .intValue());
+            int result = (((ExprNumber) l).intValue() - ((ExprNumber) r).intValue());
+            return new ExprInteger(result);
         }
 
-        return 0;
+        return new ExprInteger(0);
     }
 }

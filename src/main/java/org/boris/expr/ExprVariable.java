@@ -89,7 +89,10 @@ public class ExprVariable extends ExprEvaluatable
             findVariables(bo.getLHS(), vars);
             findVariables(bo.getRHS(), vars);
         } else if (expr instanceof ExprVariable) {
-            vars.add(((ExprVariable) expr));
+            String name = ((ExprVariable) expr).getName().toLowerCase(); 
+            if (!name.equals("true") && !name.equals("false")) {
+                vars.add(((ExprVariable) expr));
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprMissing;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
@@ -25,11 +26,20 @@ public class MAX extends AbstractFunction
             throws ExprException {
         BigDecimal d = new BigDecimal(Double.toString(Double.MAX_VALUE)).negate();
         
+        if (allArgsMissing(context, args)) {
+            return new ExprMissing();
+        }
+        
         for (Expr a : args) {
             Expr res = max(context, a);
             if (res instanceof ExprError) {
                 return res;
-            } else {
+            } 
+            else if (res.type == ExprType.Missing) {
+                // Missing values should not be factored in. i.e. -5 > missing
+                continue;
+            }
+            else {
                 BigDecimal r = ((ExprDecimal) res).decimalValue();
                 if (r.compareTo(d) > 0)
                     d = r;
@@ -43,6 +53,10 @@ public class MAX extends AbstractFunction
         String variableName = getVariableName(arg);
         if (arg instanceof ExprEvaluatable) {
             arg = ((ExprEvaluatable) arg).evaluate(context);
+        }
+        
+        if (arg != null && arg.type == ExprType.Missing) {
+            return arg;
         }
         
         validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);

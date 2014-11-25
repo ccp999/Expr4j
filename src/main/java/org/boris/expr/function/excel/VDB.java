@@ -1,21 +1,18 @@
 package org.boris.expr.function.excel;
 
-import java.math.BigDecimal;
-
 import org.boris.expr.Expr;
-import org.boris.expr.ExprDecimal;
-import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
-import org.boris.expr.ExprNumber;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
-import org.boris.expr.util.Financials;
 
 public class VDB extends AbstractFunction
 {
     public Expr evaluate(IEvaluationContext context, Expr[] args)
             throws ExprException {
-        assertArgCount(args, 5, 7);
+        
+        //NOT IMPLEMENTED CORRECTLY
+        return null;
+       /* assertArgCount(args, 5, 7);
 
         // cost
         Expr eC = evalArg(context, args[0]);
@@ -82,6 +79,6 @@ public class VDB extends AbstractFunction
         double vdb = Financials.vdb(cost, salvage, life, start_period,
                 end_period, factor, no_switch);
 
-        return new ExprDecimal(new BigDecimal(Double.toString(vdb)));
+        return new ExprDecimal(new BigDecimal(Double.toString(vdb)));*/
     }
 }

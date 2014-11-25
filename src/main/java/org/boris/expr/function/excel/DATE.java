@@ -1,5 +1,7 @@
 package org.boris.expr.function.excel;
 
+import java.math.BigDecimal;
+
 import org.boris.expr.Expr;
 import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
@@ -17,19 +19,19 @@ public class DATE extends AbstractFunction
         Expr eY = evalArg(context, args[0]);
         if (!isNumber(eY))
             return ExprError.VALUE;
-        double y = ((ExprNumber) eY).decimalValue().doubleValue();
+        BigDecimal y = ((ExprNumber) eY).decimalValue();
         Expr eM = evalArg(context, args[1]);
         if (!isNumber(eM))
             return ExprError.VALUE;
-        double m = ((ExprNumber) eM).decimalValue().doubleValue();
+        BigDecimal m = ((ExprNumber) eM).decimalValue();
         Expr eD = evalArg(context, args[1]);
         if (!isNumber(eD))
             return ExprError.VALUE;
-        double d = ((ExprNumber) eD).decimalValue().doubleValue();
-        double r = ExcelDate.date(y, m, d);
-        if (r < 0)
+        BigDecimal d = ((ExprNumber) eD).decimalValue();
+        BigDecimal r = ExcelDate.date(y, m, d);
+        if (r.compareTo(BigDecimal.ZERO) < 0)
             return ExprError.NUM;
-        return new ExprDecimal(Double.toString(r));
+        return new ExprDecimal(r);
     }
 
 }

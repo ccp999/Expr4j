@@ -16,12 +16,7 @@ public class ExprAddition extends AbstractMathematicalOperator
     }
     
     protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
-        if (lhs.isDecimal() || rhs.isDecimal()) {
-            return new ExprDecimal(lhs.decimalValue().add(rhs.decimalValue()));
-        }
-        else {
-            return new ExprInteger(lhs.intValue() + rhs.intValue());
-        }
+        return new ExprDecimal(lhs.decimalValue().add(rhs.decimalValue()));
     }
 
     public void validate() throws ExprException {

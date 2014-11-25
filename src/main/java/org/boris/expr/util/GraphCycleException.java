@@ -9,8 +9,10 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
-public class GraphCycleException extends Exception
+public class GraphCycleException extends RuntimeException
 {
+    private static final long serialVersionUID = 7811745494030068309L;
+
     public GraphCycleException() {
     }
 

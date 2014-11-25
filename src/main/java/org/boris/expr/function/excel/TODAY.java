@@ -13,7 +13,7 @@ public class TODAY extends AbstractFunction
 {
     public Expr evaluate(IEvaluationContext context, Expr[] args) throws ExprException {
         assertArgCount(args, 0);
-        return new ExprDecimal(Double.toString(ExcelDate.toExcelDate(new Date().getTime())));
+        return new ExprDecimal(ExcelDate.toExcelDate(new Date().getTime(), 0));
     }
 
     public boolean isVolatile() {

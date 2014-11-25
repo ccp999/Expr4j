@@ -24,15 +24,34 @@ public class DateArithmeticOperandConverter implements IOperandConversionVisitor
             ExprDate lExprDate = (ExprDate) operands.getLeftOperand();
             ExprDate rExprDate = (ExprDate) operands.getRightOperand();
             
-            operands.setLeftOperand(new ExprDecimal(lExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
-            operands.setRightOperand(new ExprDecimal(rExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
+            operands.setLeftOperand(new ExprDecimal(lExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT).setScale(0, java.math.RoundingMode.DOWN)));
+            operands.setRightOperand(new ExprDecimal(rExprDate.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT).setScale(0, java.math.RoundingMode.DOWN)));
         }        
         // If left operand is a date and right is a decimal, we need to convert the right operand
-        // to milliseconds because we are adding days to a date.
-        else if (operands.getLeftOperand() != null && operands.getLeftOperand().type == ExprType.Date
-                && operands.getRightOperand() instanceof ExprNumber) {
+        // to milliseconds because we are adding days to a date.7
+        else if (isDate(operands.getLeftOperand()) && isNumber(operands.getRightOperand())) {
             ExprNumber exprNumber = (ExprNumber) operands.getRightOperand();
-            operands.setRightOperand(new ExprDecimal(exprNumber.decimalValue().divide(MILLISECONDS_IN_DAY, ExprDecimal.MATH_CONTEXT)));
+            operands.setRightOperand(new ExprDecimal(exprNumber.decimalValue().multiply(MILLISECONDS_IN_DAY)));
+        }
+        else if (isDate(operands.getRightOperand()) && isNumber(operands.getLeftOperand())) {
+            ExprNumber exprNumber = (ExprNumber) operands.getLeftOperand();
+            operands.setLeftOperand(new ExprDecimal(exprNumber.decimalValue().multiply(MILLISECONDS_IN_DAY)));
         }
     }
+    
+    private boolean isDate(Expr expr) {
+        if (expr != null && expr.type == ExprType.Date) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private boolean isNumber(Expr expr) {
+        if (expr != null && expr instanceof ExprNumber) {
+            return true;
+        }
+        
+        return false;
+    }    
 }

@@ -18,10 +18,8 @@ public class ExprDivision extends AbstractMathematicalOperator
     }
 
     protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
-        if (rhs.decimalValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (this.rhs != null && this.rhs.type == ExprType.Variable) {
-                return ExprError.generateError(ExprError.DIV0, this.rhs.toString());
-            }            
+        if (rhs.decimalValue().compareTo(BigDecimal.ZERO) == 0) {         
+            return ExprError.generateError(ExprError.DIV0, this.rhs.toString());            
         }
         
         return new ExprDecimal(lhs.decimalValue().divide(rhs.decimalValue(), ExprDecimal.MATH_CONTEXT));

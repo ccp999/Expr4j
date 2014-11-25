@@ -8,6 +8,7 @@ import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprEvaluatable;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprMissing;
 import org.boris.expr.ExprNumber;
 import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
@@ -25,6 +26,10 @@ public class SUM extends AbstractFunction
             throws ExprException {
         BigDecimal res = BigDecimal.ZERO;
         
+        if (allArgsMissing(context, args)) {
+            return new ExprMissing();
+        }
+        
         for (Expr arg : args)
             res = res.add(sum(context, arg));
         return new ExprDecimal(res);
@@ -38,7 +43,7 @@ public class SUM extends AbstractFunction
             arg = ((ExprEvaluatable) arg).evaluate(context);
         }
                 
-        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);
+        validateEvalType(arg, ExprError.generateError(ExprError.NUM), variableName, ExprType.Missing, ExprType.Decimal, ExprType.Integer, ExprType.Array);
         
         if (arg instanceof ExprNumber) {
             return ((ExprNumber) arg).decimalValue();

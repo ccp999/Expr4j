@@ -1,6 +1,7 @@
 package org.boris.expr.function.excel;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.boris.expr.Expr;
 import org.boris.expr.ExprDecimal;
@@ -19,7 +20,7 @@ public class SYD extends AbstractFunction
         BigDecimal per = asDecimal(context, args[3], true);
         BigDecimal syd = cost.subtract(salvage)
                 .multiply(life.subtract(per).add(BigDecimal.ONE).multiply(new BigDecimal("2")))
-                .divide(life.multiply(life.add(BigDecimal.ONE)), ExprDecimal.MATH_CONTEXT);
+                .divide(life.multiply(life.add(BigDecimal.ONE)), ExprDecimal.MATH_CONTEXT).setScale(11, RoundingMode.FLOOR);
         
         return new ExprDecimal(syd);
     }

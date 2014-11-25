@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 import junit.framework.TestCase;
 
 import org.boris.expr.engine.AbstractCalculationEngine;
@@ -22,11 +24,11 @@ public class IterationEngineTest extends TestCase
         e.set("B1", "=A1*2");
         e.set("A1", "=12*2");
         e.set("C1", "=B1*A1");
-        assertResult(e, "B1", 48);
-        assertResult(e, "C1", 48 * 24);
+        assertResult(e, "B1", "48");
+        assertResult(e, "C1", "1152");
         e.set("A1", "2");
-        assertResult(e, "B1", 4);
-        assertResult(e, "C1", 8);
+        assertResult(e, "B1", "4");
+        assertResult(e, "C1", "8");
     }
 
     public void testRangeDependencies() throws Exception {
@@ -36,9 +38,9 @@ public class IterationEngineTest extends TestCase
         e.set("A2", "3");
         e.set("B2", "4");
         e.set("D4", "=sum(A1:B2)");
-        assertResult(e, "D4", 10);
+        assertResult(e, "D4", "10");
         e.set("A1", "10");
-        assertResult(e, "D4", 19);
+        assertResult(e, "D4", "19");
     }
 
     public void testFunction() throws Exception {
@@ -46,13 +48,13 @@ public class IterationEngineTest extends TestCase
         e.set("A4", "25");
         e.set("B6", "26");
         e.set("A1", "=sum(45,34,2.3,A4:B8)");
-        assertResult(e, "A1", 132.3);
+        assertResult(e, "A1", "132.3");
     }
 
     public void testArrays() throws Exception {
         IterationEngine e = new IterationEngine(new BasicEngineProvider());
         e.set("A1:B2", "32");
-        assertResult(e, "A2", 32);
+        assertResult(e, "A2", "32");
         e.set("D5:E6", "=TestRange(A1)");
     }
 
@@ -64,8 +66,8 @@ public class IterationEngineTest extends TestCase
         e.set("A1", "45");
         e.set("B1", "=alias1:x");
         e.set("B2", "=x");
-        assertResult(e, "B1", 45);
-        assertResult(e, "B2", 45);
+        assertResult(e, "B1", "45");
+        assertResult(e, "B2", "45");
     }
 
     public void testInvalidReference() throws Exception {
@@ -92,10 +94,10 @@ public class IterationEngineTest extends TestCase
     }
 
     private void assertResult(AbstractCalculationEngine e, String range,
-            double value) throws Exception {
+            String value) throws Exception {
         Expr expr = e.getValue(Range.valueOf(range));
         if (expr instanceof ExprNumber) {
-            assertEquals(value, ((ExprNumber) expr).doubleValue());
+            assertEquals(new BigDecimal(value), ((ExprNumber) expr).decimalValue());
         } else {
             fail("Range: " + range + " does not contain a number");
         }

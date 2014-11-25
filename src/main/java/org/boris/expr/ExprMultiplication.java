@@ -16,12 +16,7 @@ public class ExprMultiplication extends AbstractMathematicalOperator
     }
 
     protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
-        if (lhs.isDecimal() || rhs.isDecimal()) {
-            return new ExprDecimal(lhs.decimalValue().multiply(rhs.decimalValue()));
-        }
-        else {
-            return new ExprInteger(lhs.intValue() * rhs.intValue());
-        }
+        return new ExprDecimal(lhs.decimalValue().multiply(rhs.decimalValue()));
     }
     
     public String toString() {

@@ -108,6 +108,9 @@ public class Exprs
         if (o instanceof Integer)
             return new ExprInteger(((Integer) o).intValue());
 
+        if (o instanceof Double)
+            return new ExprDecimal(o.toString());
+
         if (o instanceof Boolean)
             return new ExprBoolean(((Boolean) o).booleanValue());
 

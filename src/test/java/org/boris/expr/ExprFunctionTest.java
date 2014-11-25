@@ -19,7 +19,7 @@ public class ExprFunctionTest extends TestCase
                 .parse("test(1,\"hello\",3.54,1+2,5*5)");
         assertEquals(new ExprInteger(1), f.getArg(0));
         assertEquals(new ExprString("hello"), f.getArg(1));
-        assertEquals(new ExprDouble(3.54), f.getArg(2));
+        assertEquals(new ExprDecimal("3.54"), f.getArg(2));
         assertEquals(b.parse("1+2"), f.getArg(3));
         assertEquals(new ExprAddition(new ExprInteger(1), new ExprInteger(2)),
                 f.getArg(3));

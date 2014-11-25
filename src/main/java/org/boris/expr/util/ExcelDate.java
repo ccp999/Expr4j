@@ -9,25 +9,29 @@
  *******************************************************************************/
 package org.boris.expr.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import org.boris.expr.ExprDecimal;
 
 public class ExcelDate
 {
     public static final double MS_IN_DAY = 86400000; // 24*60*60*1000
 
-    public static long toJavaDate(double value) {
+    public static long toJavaDate(BigDecimal value) {
         Calendar c = new GregorianCalendar();
-        long days = Math.round(Math.floor(value));
-        long millis = Math.round(MS_IN_DAY * (value - days));
+        BigDecimal days = value.setScale(0, RoundingMode.FLOOR);
+        BigDecimal millis = value.subtract(days).multiply(new BigDecimal(MS_IN_DAY)).setScale(0, RoundingMode.FLOOR);
         c.setLenient(true);
         c.set(1900, 0, 0, 0, 0, 0);
-        c.set(Calendar.DAY_OF_YEAR, (int) days - 1);
-        c.set(Calendar.MILLISECOND, (int) millis);
+        c.set(Calendar.DAY_OF_YEAR, days.subtract(BigDecimal.ONE).intValue());
+        c.set(Calendar.MILLISECOND, millis.intValue());
         return c.getTimeInMillis();
     }
 
-    public static double toExcelDate(long millis) {
+    public static BigDecimal toExcelDate(long millis, int precision) {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(millis);
         int year = c.get(Calendar.YEAR);
@@ -37,35 +41,35 @@ public class ExcelDate
         days -= year / 100; // centuries aren't leap years
         days += year / 400; // unless they are divisible by 400
         days += c.get(Calendar.DAY_OF_YEAR) + 1;
-        double m = c.get(Calendar.HOUR_OF_DAY) * 60;
-        m += c.get(Calendar.MINUTE);
-        m *= 60;
-        m += c.get(Calendar.SECOND);
-        m *= 1000;
-        m += c.get(Calendar.MILLISECOND);
-        m /= MS_IN_DAY;
-        return days + m;
+        BigDecimal m = new BigDecimal(Long.toString(c.get(Calendar.HOUR_OF_DAY) * 60));
+        m = m.add(new BigDecimal(c.get(Calendar.MINUTE)));
+        m = m.multiply(new BigDecimal(60));
+        m = m.add(new BigDecimal(c.get(Calendar.SECOND)));
+        m = m.multiply(new BigDecimal(1000));
+        m = m.add(new BigDecimal(c.get(Calendar.MILLISECOND)));
+        m = m.divide(new BigDecimal(Double.toString(MS_IN_DAY)), ExprDecimal.MATH_CONTEXT).setScale(precision, RoundingMode.FLOOR);
+        return new BigDecimal(days).add(m);
     }
 
-    private static int get(double value, int field) {
+    private static int get(BigDecimal value, int field) {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(toJavaDate(value));
         return c.get(field);
     }
 
-    public static int getDayOfMonth(double value) {
+    public static int getDayOfMonth(BigDecimal value) {
         return get(value, Calendar.DAY_OF_MONTH);
     }
 
-    public static int getMonth(double value) {
+    public static int getMonth(BigDecimal value) {
         return get(value, Calendar.MONTH) + 1;
     }
 
-    public static int getYear(double value) {
+    public static int getYear(BigDecimal value) {
         return get(value, Calendar.YEAR);
     }
 
-    public static int getWeekday(double value) {
+    public static int getWeekday(BigDecimal value) {
         return get(value, Calendar.DAY_OF_WEEK);
     }
 
@@ -92,13 +96,13 @@ public class ExcelDate
         return s;
     }
 
-    public static double date(double y, double m, double d) {
-        y %= 24;
+    public static BigDecimal date(BigDecimal y, BigDecimal m, BigDecimal d) {
+        y = y.remainder(new BigDecimal(24));
         Calendar c = new GregorianCalendar();
-        c.set((int) y, (int) m, (int) d, 0, 0, 0);
-        double t = ExcelDate.toExcelDate(c.getTimeInMillis());
-        if (t > 10000)
-            return -1;
+        c.set(y.intValue(), m.intValue(), d.intValue(), 0, 0, 0);
+        BigDecimal t = ExcelDate.toExcelDate(c.getTimeInMillis(), 0);
+        if (t.compareTo(new BigDecimal("10000")) > 0)
+            return BigDecimal.ONE.negate();
         return t;
     }
 

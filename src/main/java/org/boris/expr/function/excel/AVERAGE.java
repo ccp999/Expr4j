@@ -33,6 +33,10 @@ public class AVERAGE extends AbstractFunction
         counter.count = 0;
         counter.value = BigDecimal.ZERO;
         
+        if (allArgsMissing(context, args)) {
+            return new ExprMissing();
+        }
+        
         for (Expr a : args) {
             eval(context, a, counter, true);
         }
@@ -57,7 +61,7 @@ public class AVERAGE extends AbstractFunction
         if (a == null)
             return;
 
-        if (a instanceof ExprMissing)
+        if (a.type == ExprType.Missing)
             return;
 
         validateEvalType(a, ExprError.generateError(ExprError.NUM), variableName, ExprType.Decimal, ExprType.Integer, ExprType.Array);

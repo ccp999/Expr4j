@@ -16,7 +16,16 @@ public class ExprNotEqual extends AbstractComparisonOperator
     }
 
     public Expr evaluate(IEvaluationContext context) throws ExprException {
-        return bool(compare(context) != 0);
+        Expr result = compare(context);
+        if (result.getType() == ExprType.Missing) {
+            return bool(false);
+        }
+        else if (result.getType() == ExprType.Integer) {
+            return bool(((ExprInteger) result).intValue() != 0);
+        }
+        else {
+            return bool(false);
+        }        
     }
 
     public String toString() {
