@@ -70,7 +70,7 @@ public class AbstractMathematicalOperatorTest extends TestCase {
         catch (ExprEvaluationException e) {
             assertEquals("A3", e.getError().getVariableName());
             assertEquals("abc", e.getError().getValue());
-            assertEquals("#NUM_OR_DATE!", e.getError().getErrType());
+            assertEquals("#NUM!", e.getError().getErrType());
             exceptionCount++;
         }
         try {
