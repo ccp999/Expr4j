@@ -34,7 +34,6 @@ public class ExcelLogicalFunctionsTest extends TH
     }
 
     public void testIF() throws Exception {
-        BasicEvaluationCallback c = new BasicEvaluationCallback();
         //c.addVariable("A1", value)
         IF i = new IF();
         assertResult("if(10<100,4,5)", 4);
