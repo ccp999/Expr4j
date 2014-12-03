@@ -20,6 +20,7 @@ import org.boris.expr.IEvaluationContext;
 import org.boris.expr.IExprFunction;
 import org.boris.expr.function.excel.AVERAGE;
 import org.boris.expr.function.excel.CONCATENATE;
+import org.boris.expr.function.excel.EMPTY;
 import org.boris.expr.function.excel.FORMAT;
 import org.boris.expr.function.excel.IF;
 import org.boris.expr.function.excel.JOIN;
@@ -44,6 +45,7 @@ public class LiteExcelFunctionProvider implements IFunctionProvider
         functions.put("TEXTIFY", new TEXTIFY());
         functions.put("JOIN",  new JOIN());
         functions.put("PATTERN",  new PATTERN());
+        functions.put("EMPTY",  new EMPTY());
     }
 
     public boolean hasFunction(ExprFunction function) {

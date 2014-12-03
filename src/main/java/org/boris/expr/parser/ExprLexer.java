@@ -220,7 +220,12 @@ public class ExprLexer
         StringBuilder sb = new StringBuilder();
         char c = 0;
         while (c != '\"') {
-            c = (char) r.read();
+            int nextChar = r.read();
+            if (nextChar == -1) {
+                throw new IOException("Unterminated string value");    
+            }
+            
+            c = (char) nextChar;
             switch (c) {
             case '\"':
                 int v = r.peek();

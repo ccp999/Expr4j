@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import org.boris.expr.function.excel.CHAR;
 import org.boris.expr.function.excel.CODE;
 import org.boris.expr.function.excel.CONCATENATE;
+import org.boris.expr.function.excel.EMPTY;
 import org.boris.expr.function.excel.EXACT;
 import org.boris.expr.function.excel.FIND;
 import org.boris.expr.function.excel.FORMAT;
@@ -31,6 +32,7 @@ import org.boris.expr.function.excel.SEARCH;
 import org.boris.expr.function.excel.TEXTIFY;
 import org.boris.expr.function.excel.TRIM;
 import org.boris.expr.function.excel.UPPER;
+import org.boris.expr.util.NumberToText;
 
 public class ExcelTextFunctionsTest extends TH
 {
@@ -229,22 +231,64 @@ public class ExcelTextFunctionsTest extends TH
         assertEquals(eval(p, new ExprString("A"), new ExprString("B"), new ExprString("C"), "The pattern is {0}, {1}, and {2}"), "The pattern is A, B, and C");
         assertEquals(eval(b, p, new ExprVariable("A1"), new ExprVariable("A2"),  new ExprVariable("A3"), "The pattern is {0}, {1}, and {2}"), "The pattern is A, ___, and C");
     }     
+
+    public void testEMPTY() throws Exception {
+        BasicEvaluationCallback b = new BasicEvaluationCallback();
+        b.addVariable("A1", new ExprString(""));
+        b.addVariable("A2", new ExprString("a"));
+        
+        EMPTY e = new EMPTY();
+        assertEquals(true, eval(b, e, b.parse("A1")));
+        assertEquals(false, eval(b, e, b.parse("A2")));
+        
+        boolean isError = false;
+        try {
+            assertEquals(true, eval(b, e, new ExprString("A")));
+        }catch (Exception ex) {
+            isError = true;
+        }
+        
+        assertTrue(isError);
+    }    
     
     public void testTEXTIFY() throws Exception {
         TEXTIFY p = new TEXTIFY();
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("125"))).toString(), new ExprNumberText("one hundred twenty-five").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("105"))).toString(), new ExprNumberText("one hundred five").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("15"))).toString(), new ExprNumberText("fifteen").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("115"))).toString(), new ExprNumberText("one hundred fifteen").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("1600"))).toString(), new ExprNumberText("one thousand six hundred").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("1492"))).toString(), new ExprNumberText("one thousand four hundred ninety two").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.19"))).toString(), new ExprNumberText("three hundred fourty five point nineteen").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.09"))).toString(), new ExprNumberText("three hundred fourty five point zero nine").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("-345.09"))).toString(), new ExprNumberText("negative three hundred fourty five point zero nine").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("1492"))).toString(), new ExprNumberText("one thousand four hundred ninety-two").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.19"))).toString(), new ExprNumberText("three hundred fourty-five point nineteen").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.09"))).toString(), new ExprNumberText("three hundred fourty-five point zero nine").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("-345.09"))).toString(), new ExprNumberText("negative three hundred fourty-five point zero nine").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("0"))).toString(), new ExprNumberText("zero").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("10")), true).toString(), new ExprNumberText("ten dollars").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("1")), true).toString(), new ExprNumberText("one dollar").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("10.56")), true).toString(), new ExprNumberText("ten dollars and fifty six cents").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("10.56")), true).toString(), new ExprNumberText("ten dollars and fifty-six cents").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("10.01")), true).toString(), new ExprNumberText("ten dollars and one cent").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("100000000000000000000"))).toString(), new ExprNumberText("100000000000000000000.00").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("999999999999999"))).toString(), new ExprNumberText("nine hundred ninety nine trillion nine hundred ninety nine billion nine hundred ninety nine million nine hundred ninety nine thousand nine hundred ninety nine").toString());
-    }    
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("999999999999999"))).toString(), new ExprNumberText("nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine").toString());
+    }  
+    
+    public void testTEXTIFYBackToNumber() throws Exception {
+        assertEquals(125.0, NumberToText.convert("one hundred twenty-five"));
+        assertEquals(105.0, NumberToText.convert("one hundred five"));
+        assertEquals(115.0, NumberToText.convert("one hundred fifteen"));
+        assertEquals(15.0, NumberToText.convert("fifteen"));
+        assertEquals(1600.0, NumberToText.convert("one thousand six hundred"));
+        assertEquals(1492.0, NumberToText.convert("one thousand four hundred ninety-two"));
+        assertEquals(345.19, NumberToText.convert("three hundred fourty-five point nineteen"));
+        assertEquals(345.09, NumberToText.convert("three hundred fourty-five point zero nine"));
+        assertEquals(-345.09, NumberToText.convert("negative three hundred fourty-five point zero nine"));
+        assertEquals(0.0, NumberToText.convert("zero"));
+        assertEquals(10.0, NumberToText.convert("ten dollars"));
+        assertEquals(1.0, NumberToText.convert("one dollar"));
+        assertEquals(10.56, NumberToText.convert("ten dollars and fifty-six cents"));
+        assertEquals(10.01, NumberToText.convert("ten dollars and one cent"));
+        assertEquals(999999999999999.0, NumberToText.convert("nine hundred ninety-nine trillion nine hundred ninety-nine billion nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine"));        
+    }     
+    
 /*
     public void testVALUE() throws Exception {
         assertResult("VALUE(\"16:48:00\")-VALUE(\"12:00:00\")", 0.2);

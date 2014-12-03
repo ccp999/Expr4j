@@ -56,13 +56,13 @@ public class NumberToText {
         if (number.remainder(ONE_HUNDRED).compareTo(TWENTY) < 0) {
             current = numNames[number.remainder(ONE_HUNDRED).intValue()];
             number = number.divide(ONE_HUNDRED, new MathContext(50)).setScale(0, RoundingMode.DOWN);
-        //Handles numbers between 20 through 99 by concatenating tw parts together
+        //Handles numbers between 20 through 99 by concatenating two parts together
         //i.e. 95 = "ninety" + "five"
         } else {            
             current = numNames[number.remainder(BigDecimal.TEN).intValue()];
             number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
 
-            current = tensNames[number.remainder(BigDecimal.TEN).intValue()] + current;
+            current = tensNames[number.remainder(BigDecimal.TEN).intValue()] + "-" + current.replace(" ", "");
             number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
         }
         if (number.compareTo(BigDecimal.ZERO) == 0) return current;
@@ -77,6 +77,8 @@ public class NumberToText {
      * @return
      */
     public static double convert(String words) {
+        words = words.replaceAll("-", " ");
+        
         List<String> wordList = Arrays.asList(words.split(" "));
         double convertedValue = 0;
         double multiplierValue = 0;
