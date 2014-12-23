@@ -62,7 +62,7 @@ public class NumberToText {
             current = numNames[number.remainder(BigDecimal.TEN).intValue()];
             number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
 
-            current = tensNames[number.remainder(BigDecimal.TEN).intValue()] + "-" + current.replace(" ", "");
+            current = tensNames[number.remainder(BigDecimal.TEN).intValue()] + (current.equals("") ? "" : "-") + current.replace(" ", "");
             number = number.divide(BigDecimal.TEN, new MathContext(50)).setScale(0, RoundingMode.DOWN);
         }
         if (number.compareTo(BigDecimal.ZERO) == 0) return current;

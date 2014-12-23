@@ -253,6 +253,9 @@ public class ExcelTextFunctionsTest extends TH
     
     public void testTEXTIFY() throws Exception {
         TEXTIFY p = new TEXTIFY();
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("50"))).toString(), new ExprNumberText("fifty").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("100"))).toString(), new ExprNumberText("one hundred").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("1000"))).toString(), new ExprNumberText("one thousand").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("125"))).toString(), new ExprNumberText("one hundred twenty-five").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("105"))).toString(), new ExprNumberText("one hundred five").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("15"))).toString(), new ExprNumberText("fifteen").toString());
@@ -272,6 +275,9 @@ public class ExcelTextFunctionsTest extends TH
     }  
     
     public void testTEXTIFYBackToNumber() throws Exception {
+        assertEquals(50.0, NumberToText.convert("fifty"));
+        assertEquals(100.0, NumberToText.convert("one hundred"));
+        assertEquals(1000.0, NumberToText.convert("one thousand"));
         assertEquals(125.0, NumberToText.convert("one hundred twenty-five"));
         assertEquals(105.0, NumberToText.convert("one hundred five"));
         assertEquals(115.0, NumberToText.convert("one hundred fifteen"));
