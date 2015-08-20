@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dotloop</groupId>
-	<artifactId>expr</artifactId>
+	<artifactId>expr4j</artifactId>
 	<version>0.0.2</version>
 	<name>expr4j</name>
 	<build>
