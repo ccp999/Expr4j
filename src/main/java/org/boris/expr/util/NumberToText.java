@@ -18,7 +18,7 @@ public class NumberToText {
     
     private static final String[] specialNames = { "", " thousand", " million", " billion", " trillion" };
 
-    private static final String[] tensNames = { "", " ten", " twenty", " thirty", " fourty", " fifty", " sixty",
+    private static final String[] tensNames = { "", " ten", " twenty", " thirty", " forty", " fifty", " sixty",
             " seventy", " eighty", " ninety" };
 
     private static final String[] numNames = { "", " one", " two", " three", " four", " five", " six", " seven",

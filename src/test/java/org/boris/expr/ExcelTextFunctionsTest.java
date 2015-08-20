@@ -10,6 +10,7 @@
 package org.boris.expr;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.boris.expr.function.excel.CHAR;
 import org.boris.expr.function.excel.CODE;
@@ -203,9 +204,9 @@ public class ExcelTextFunctionsTest extends TH
     
     public void testFORMAT() throws Exception {
         FORMAT f = new FORMAT();
-        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.3467")), "#.00"), new ExprFormatted("100.35"));
-        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.9999")), "#.00"), new ExprFormatted("101.00"));
-        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.3467")), "$#.00"), new ExprFormatted("$100.35"));
+        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.3467")), "#.00").toString(), new ExprFormatted(new DecimalFormat("#.00"), new ExprDecimal("100.35")).toString());
+        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.9999")), "#.00").toString(), new ExprFormatted(new DecimalFormat("#.00"), new ExprDecimal("101.00")).toString());
+        assertEquals(eval(f, new ExprDecimal(new BigDecimal("100.3467")), "$#.00").toString(), new ExprFormatted(new DecimalFormat("$#.00"), new ExprDecimal("100.35")).toString());
         assertEquals(((Expr) eval(f, new ExprMissing(), "#.00")).getType(), ExprType.Missing);
         assertEquals(((Expr) eval(f, new ExprString("abc"), "#.00")).getType(), ExprType.Error);
     }
@@ -262,9 +263,9 @@ public class ExcelTextFunctionsTest extends TH
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("115"))).toString(), new ExprNumberText("one hundred fifteen").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("1600"))).toString(), new ExprNumberText("one thousand six hundred").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("1492"))).toString(), new ExprNumberText("one thousand four hundred ninety-two").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.19"))).toString(), new ExprNumberText("three hundred fourty-five point nineteen").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.09"))).toString(), new ExprNumberText("three hundred fourty-five point zero nine").toString());
-        assertEquals(eval(p, new ExprDecimal(new BigDecimal("-345.09"))).toString(), new ExprNumberText("negative three hundred fourty-five point zero nine").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.19"))).toString(), new ExprNumberText("three hundred forty-five point nineteen").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("345.09"))).toString(), new ExprNumberText("three hundred forty-five point zero nine").toString());
+        assertEquals(eval(p, new ExprDecimal(new BigDecimal("-345.09"))).toString(), new ExprNumberText("negative three hundred forty-five point zero nine").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("0"))).toString(), new ExprNumberText("zero").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("10")), true).toString(), new ExprNumberText("ten dollars").toString());
         assertEquals(eval(p, new ExprDecimal(new BigDecimal("1")), true).toString(), new ExprNumberText("one dollar").toString());
@@ -284,9 +285,9 @@ public class ExcelTextFunctionsTest extends TH
         assertEquals(15.0, NumberToText.convert("fifteen"));
         assertEquals(1600.0, NumberToText.convert("one thousand six hundred"));
         assertEquals(1492.0, NumberToText.convert("one thousand four hundred ninety-two"));
-        assertEquals(345.19, NumberToText.convert("three hundred fourty-five point nineteen"));
-        assertEquals(345.09, NumberToText.convert("three hundred fourty-five point zero nine"));
-        assertEquals(-345.09, NumberToText.convert("negative three hundred fourty-five point zero nine"));
+        assertEquals(345.19, NumberToText.convert("three hundred forty-five point nineteen"));
+        assertEquals(345.09, NumberToText.convert("three hundred forty-five point zero nine"));
+        assertEquals(-345.09, NumberToText.convert("negative three hundred forty-five point zero nine"));
         assertEquals(0.0, NumberToText.convert("zero"));
         assertEquals(10.0, NumberToText.convert("ten dollars"));
         assertEquals(1.0, NumberToText.convert("one dollar"));

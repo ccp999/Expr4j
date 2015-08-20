@@ -10,26 +10,24 @@
 package org.boris.expr;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-
-
 
 public class ExprFormatted extends ExprDecimal
 {
     public final String formattedValue;
-    public ExprFormatted(String formattedValue) {
-        
-        super(ExprType.Formatted);
-        
-        DecimalFormat format = new DecimalFormat();
-        this.formattedValue = formattedValue;
-        try {
-            this.setValue(Double.toString(format.parse(formattedValue).doubleValue()));
-        } catch (ParseException e) {
-           this.setValue("0");
-        }       
-    }
     
+    public ExprFormatted(DecimalFormat format, ExprNumber expression) {       
+        super(ExprType.Formatted);
+
+        if (expression.isDecimal()) {
+            this.formattedValue = format.format(expression.decimalValue());    
+            this.setValue(expression.decimalValue());
+        }
+        else {
+            this.formattedValue = format.format(expression.intValue());
+            this.setValue(Integer.toString(expression.intValue()));
+        }        
+    }
+        
     public String toString() {
         return this.formattedValue;
     }

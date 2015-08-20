@@ -9,14 +9,10 @@
  *******************************************************************************/
 package org.boris.expr;
 
-import java.math.BigDecimal;
-
-import org.boris.expr.util.Criteria;
-import org.boris.expr.util.Database;
 
 public class ExcelDatabaseFunctionsTest extends TH
 {
-    public void testDatabase() throws Exception {
+/*    public void testDatabase() throws Exception {
         BasicEvaluationCallback b = new BasicEvaluationCallback();
         Database db = Database.valueOf(b, loadArray("db1-d.txt"));
         assertEquals(db.get(2, "Yield"), 9);
@@ -78,5 +74,5 @@ public class ExcelDatabaseFunctionsTest extends TH
         BasicEvaluationCallback c = new BasicEvaluationCallback();
         c.set(loadArray("db1.txt"));
         return c;
-    }
+    }*/
 }

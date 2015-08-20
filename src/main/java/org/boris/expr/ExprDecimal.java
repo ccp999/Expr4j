@@ -37,7 +37,11 @@ public class ExprDecimal extends ExprNumber
     protected void setValue(String value) {
         this.value = new BigDecimal(value);
     }
-    
+
+    protected void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
     public int intValue() {
         return value.intValue();
     }

@@ -40,7 +40,7 @@ public class TEXTIFY extends AbstractFunction
         }
         
         try {
-            ExprTypes.assertType(expression, ExprType.Decimal, ExprType.Integer);
+            ExprTypes.assertType(expression, ExprType.Decimal, ExprType.Integer, ExprType.Formatted);
         }
         catch (ExprException e) {
             return ExprError.generateError(ExprError.NUM);

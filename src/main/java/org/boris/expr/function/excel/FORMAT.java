@@ -42,11 +42,7 @@ public class FORMAT extends AbstractFunction
 
         DecimalFormat decimalFormat = new DecimalFormat(format);
         decimalFormat.setRoundingMode(java.math.RoundingMode.HALF_UP);
-        if (((ExprNumber) expression).isDecimal()) {
-            return new ExprFormatted(decimalFormat.format(((ExprNumber) expression).decimalValue()));    
-        }
-        else {
-            return new ExprFormatted(decimalFormat.format(((ExprNumber) expression).intValue()));
-        }        
+        
+        return new ExprFormatted(decimalFormat, (ExprNumber) expression);            
     }
 }

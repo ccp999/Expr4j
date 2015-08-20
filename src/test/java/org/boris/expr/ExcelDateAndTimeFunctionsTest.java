@@ -11,7 +11,6 @@ package org.boris.expr;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import org.boris.expr.function.excel.DATE;
 import org.boris.expr.function.excel.DAY;
@@ -24,7 +23,6 @@ import org.boris.expr.function.excel.TODAY;
 import org.boris.expr.function.excel.WEEKDAY;
 import org.boris.expr.function.excel.YEAR;
 import org.boris.expr.util.ExcelDate;
-import org.boris.expr.util.IO;
 
 public class ExcelDateAndTimeFunctionsTest extends TH
 {
@@ -100,13 +98,13 @@ public class ExcelDateAndTimeFunctionsTest extends TH
 
     /** ************************************** */
 
-    public void test() throws Exception {
+/*    public void test() throws Exception {
         for (String line : IO.readLines(getClass(), "date_test_data.txt")) {
             String[] vals = IO.toArray(new StringTokenizer(line, " \t"));
             testDates(d(vals[0]), i(vals[1]), i(vals[2]), i(vals[3]),
                     i(vals[4]), i(vals[5]), i(vals[6]), i(vals[7]));
         }
-    }
+    }*/
 
     private double d(String d) {
         return Double.parseDouble(d);

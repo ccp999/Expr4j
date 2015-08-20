@@ -111,13 +111,13 @@ public class ExcelStatisticalFunctionsTest extends TH
         assertEquals(eval(c, 1.2, -1.2), 0);
     }
 
-    public void testCOUNTIF() throws Exception {
+/*    public void testCOUNTIF() throws Exception {
         BasicEvaluationCallback c = new BasicEvaluationCallback();
         c.set(loadArray("countif1.txt"));
         assertResult(c, "COUNTIF(A1:A5,\"apples\")", new ExprInteger(2));
         assertResult(c, "COUNTIF(B2:B5,\">55\")", new ExprInteger(2));
     }
-
+*/
     public void testCOVAR() throws Exception {
         AbstractFunction c = new COVAR();
         assertEquals(
