@@ -6,6 +6,8 @@ import org.boris.expr.Expr;
 import org.boris.expr.ExprDecimal;
 import org.boris.expr.ExprError;
 import org.boris.expr.ExprException;
+import org.boris.expr.ExprMissing;
+import org.boris.expr.ExprType;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.function.AbstractFunction;
 
@@ -14,8 +16,16 @@ public class CEILING extends AbstractFunction
     public Expr evaluate(IEvaluationContext context, Expr[] args)
             throws ExprException {
         assertArgCount(args, 2);
-        BigDecimal val = asDecimal(context, args[0], true);
+
         BigDecimal rnd = asDecimal(context, args[1], true);
+
+        Expr expr0 = evalArg(context, args[0]);
+        if (expr0.getType() == ExprType.Missing) {
+            return new ExprMissing();
+        }
+
+        BigDecimal val = asDecimal(context, expr0, true);
+
         if (rnd.compareTo(BigDecimal.ZERO) == 0)
             return new ExprDecimal(BigDecimal.ZERO);
         if ((val.compareTo(BigDecimal.ZERO) < 0 && rnd.compareTo(BigDecimal.ZERO) > 0)

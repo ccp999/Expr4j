@@ -30,6 +30,18 @@ public class ExprTest extends TH
         assertResult(c(), "1-sum(1,2)+x", 3.3);
     }
 
+    public void test3() throws Exception {
+        testParse("2^3");
+        assertResult("2^3", 8.);
+        assertResult("2^3+10", 18.);
+
+        // Force ArithmeticException
+        assertResult("29999999999999999^2147483647", ExprError.generateError(ExprError.OVERFLOW));
+
+        // Force an Infinity value
+        assertResult("7777^214748364", ExprError.generateError(ExprError.OVERFLOW));
+    }
+
     public void testUnary() throws Exception {
         assertResult("3-(-5)*2", 13.);
         assertException("*5");

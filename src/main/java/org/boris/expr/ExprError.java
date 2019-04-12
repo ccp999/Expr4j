@@ -9,6 +9,7 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.util.Objects;
 
 public class ExprError extends Expr
 {
@@ -22,6 +23,7 @@ public class ExprError extends Expr
     public static final Expr NUM = new ExprError("#NUM!", "Number Error");
     public static final Expr DATE = new ExprError("#DATE!", "Date Error");
     public static final Expr NUM_OR_DATE = new ExprError("#NUM_OR_DATE!", "Number or Date Error");
+    public static final Expr OVERFLOW = new ExprError("#OVERFLOW!", "Formula result exceeds maximum range");
     public static final Expr NA = new ExprError("#N/A", "Value not Available");
 
     private String errType;
@@ -73,5 +75,16 @@ public class ExprError extends Expr
     }
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        ExprError exprError = (ExprError) o;
+        return Objects.equals(errType, exprError.errType) && Objects.equals(message, exprError.message)
+                && Objects.equals(variableName, exprError.variableName) && Objects.equals(value, exprError.value);
     }
 }

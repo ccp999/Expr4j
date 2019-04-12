@@ -18,15 +18,23 @@ import org.boris.expr.ExprException;
 import org.boris.expr.ExprFunction;
 import org.boris.expr.IEvaluationContext;
 import org.boris.expr.IExprFunction;
+import org.boris.expr.function.excel.ABS;
 import org.boris.expr.function.excel.AVERAGE;
+import org.boris.expr.function.excel.CEILING;
 import org.boris.expr.function.excel.CONCATENATE;
+import org.boris.expr.function.excel.DATEDIF;
 import org.boris.expr.function.excel.EMPTY;
 import org.boris.expr.function.excel.FORMAT;
 import org.boris.expr.function.excel.IF;
 import org.boris.expr.function.excel.JOIN;
 import org.boris.expr.function.excel.MAX;
 import org.boris.expr.function.excel.MIN;
+import org.boris.expr.function.excel.MOD;
 import org.boris.expr.function.excel.PATTERN;
+import org.boris.expr.function.excel.PMT;
+import org.boris.expr.function.excel.POWER;
+import org.boris.expr.function.excel.ROUNDDOWN;
+import org.boris.expr.function.excel.ROUNDUP;
 import org.boris.expr.function.excel.SUM;
 import org.boris.expr.function.excel.TEXTIFY;
 
@@ -45,6 +53,14 @@ public class LiteExcelFunctionProvider implements IFunctionProvider
         functions.put("TEXTIFY", new TEXTIFY());
         functions.put("JOIN",  new JOIN());
         functions.put("PATTERN",  new PATTERN());
+        functions.put("CEILING",  new CEILING());
+        functions.put("PMT",  new PMT());
+        functions.put("ROUNDUP",  new ROUNDUP());
+        functions.put("ROUNDDOWN",  new ROUNDDOWN());
+        functions.put("ABS",  new ABS());
+        functions.put("MOD",  new MOD());
+        functions.put("DATEDIF",  new DATEDIF());
+        functions.put("POWER",  new POWER());
         functions.put("EMPTY",  new EMPTY());
     }
 

@@ -12,6 +12,7 @@ package org.boris.expr;
 import java.math.BigDecimal;
 
 import org.boris.expr.function.AbstractFunction;
+import org.boris.expr.function.FunctionValidationException;
 import org.boris.expr.function.excel.ABS;
 import org.boris.expr.function.excel.ACOSH;
 import org.boris.expr.function.excel.ASINH;
@@ -249,6 +250,9 @@ public class ExcelMathAndTrigFunctionsTest extends TH
         assertEquals(eval(m, -3, 2), new ExprDecimal(new BigDecimal("1").negate()));
         assertEquals(eval(m, 3, -2), new ExprDecimal(new BigDecimal("1")));
         assertEquals(eval(m, -3, -2), new ExprDecimal(new BigDecimal("1").negate()));
+
+        assertEquals(eval(m, new ExprMissing(), 2).toString(), new ExprMissing().toString());
+        assertEquals(eval(m, new ExprMissing(), 2, "strict"), ExprError.generateError(ExprError.VALUE));
     }
 
     public void testODD() throws Exception {
@@ -268,6 +272,17 @@ public class ExcelMathAndTrigFunctionsTest extends TH
 
     public void testPOWER() throws Exception {
         POWER p = new POWER();
+        assertEquals(eval(p, new ExprMissing(), 4).toString(), new ExprMissing().toString());
+
+        boolean isException = false;
+        try {
+            assertEquals(eval(p, new ExprMissing(), 4, "strict").toString(), new ExprMissing().toString());
+        } catch (FunctionValidationException e) {
+            isException = true;
+        }
+
+        assertTrue(isException);
+
         for (int i = 0; i < 100; i++) {
             double d1 = Math.random() * 100;
             int d2 = 4;

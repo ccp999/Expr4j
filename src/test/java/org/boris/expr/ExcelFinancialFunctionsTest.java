@@ -12,6 +12,11 @@ package org.boris.expr;
 import java.math.BigDecimal;
 
 import org.boris.expr.function.excel.DB;
+import org.boris.expr.function.excel.PMT;
+import org.boris.expr.function.excel.PPMT;
+import org.boris.expr.function.excel.PV;
+import org.boris.expr.function.excel.RATE;
+import org.boris.expr.function.excel.SLN;
 import org.boris.expr.function.excel.SYD;
 
 public class ExcelFinancialFunctionsTest extends TH
@@ -70,12 +75,12 @@ public class ExcelFinancialFunctionsTest extends TH
         NPV n = new NPV();
         fail("NPV not implemented");
     }
-
+*/
     public void testPMT() throws Exception {
         PMT p = new PMT();
-        fail("PMT not implemented");
+        assertEquals(eval(p, .005, 360, 100000), new ExprDecimal(new BigDecimal("599.55052515275239459146124368447591503704274249643")));
     }
-
+/*
     public void testPPMT() throws Exception {
         PPMT p = new PPMT();
         fail("PPMT not implemented");

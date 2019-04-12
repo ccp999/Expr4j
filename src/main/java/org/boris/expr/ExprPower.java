@@ -9,6 +9,8 @@
  *******************************************************************************/
 package org.boris.expr;
 
+import java.math.BigDecimal;
+
 public class ExprPower extends AbstractMathematicalOperator
 {
     public ExprPower(Expr lhs, Expr rhs) {
@@ -17,7 +19,18 @@ public class ExprPower extends AbstractMathematicalOperator
 
     @Override
     protected Expr evaluate(ExprNumber lhs, ExprNumber rhs) throws ExprException {
-        return new ExprDecimal(lhs.decimalValue().pow(rhs.intValue(), ExprDecimal.MATH_CONTEXT));        
+        try {
+            BigDecimal result = lhs.decimalValue()
+                    .pow(rhs.intValue(), ExprDecimal.MATH_CONTEXT);
+            if (Double.isInfinite(result.doubleValue())) {
+                return ExprError.generateError(ExprError.OVERFLOW);
+            } else {
+                return new ExprDecimal(lhs.decimalValue()
+                        .pow(rhs.intValue(), ExprDecimal.MATH_CONTEXT));
+            }
+        } catch (ArithmeticException e) {
+            return ExprError.generateError(ExprError.OVERFLOW);
+        }
     }      
     
     public String toString() {
@@ -31,7 +44,7 @@ public class ExprPower extends AbstractMathematicalOperator
 
     @Override
     protected ExprError assertTypeRight(Expr le, Expr re) throws ExprException {
-        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
+        return assertType(re, ExprError.NUM, ExprType.Integer, ExprType.Decimal, ExprType.Missing, ExprType.Formatted, ExprType.NumberText);
     }
 
     @Override

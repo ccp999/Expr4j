@@ -13,11 +13,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.boris.expr.function.excel.DATE;
+import org.boris.expr.function.excel.DATEDIF;
 import org.boris.expr.function.excel.DAY;
 import org.boris.expr.function.excel.HOUR;
 import org.boris.expr.function.excel.MINUTE;
 import org.boris.expr.function.excel.MONTH;
 import org.boris.expr.function.excel.NOW;
+import org.boris.expr.function.excel.PMT;
 import org.boris.expr.function.excel.SECOND;
 import org.boris.expr.function.excel.TODAY;
 import org.boris.expr.function.excel.WEEKDAY;
@@ -58,6 +60,14 @@ public class ExcelDateAndTimeFunctionsTest extends TH
 
     public void testMONTH() throws Exception {
 
+    }
+
+    public void testDATEDIF() throws Exception {
+        DATEDIF d = new DATEDIF();
+        assertEquals(eval(d, 2500, "y"), 6);
+        assertEquals(eval(d, 450, "ym"), 2);
+        assertEquals(eval(d, 450, "ymd"), 23);
+        assertEquals(eval(d, 450, "m"), 14);
     }
 
     public void testNOW() throws Exception {
